@@ -14,8 +14,8 @@ body {
 
 main {
   position: relative;
-  height: 1000px;
-  width: 1000px;
+  width: 1280px;
+  height: 720px;
 }
 
 h1 {
@@ -148,13 +148,13 @@ p {
   }
 }
 
-.character.body {
-  animation: bounce-body-short 2s infinite;
+/* .character.body {
+  animation: bounce-body-long 0.7s infinite;
 }
 
 .character.hat {
-  animation: bounce-hat-short 2s infinite;
-}
+  animation: bounce-hat-long 0.7s infinite;
+} */
 
 .character.body.jump {
   animation-name: jump-body-long;

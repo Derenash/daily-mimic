@@ -5,9 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("No main found");
     return;
   }
-  const characterContainer = createMultipleCharacters(main, 10, 1000, 1000);
-
-
+  createMultipleCharacters(main, 10, 1280, 720);
   const characters = document.querySelectorAll<HTMLImageElement>('.character');
 
   addJumpEventListener(characters);
@@ -35,8 +33,27 @@ function createCharacter(color: string, position: { x: number, y: number }): HTM
   const characterContainer = document.createElement('div');
   characterContainer.classList.add('character-container');
 
-  const body = createCharacterElement('body', 'assets/body.svg');
-  const hat = createCharacterElement('hat', `assets/hat-${color}.svg`);
+  let path = "assets/img/"
+
+  if (position.x % 2 == 0) {
+    path = "assets/imgFlip/"
+  }
+
+  const body = createCharacterElement('body', `${path}body.svg`);
+  const hat = createCharacterElement('hat', `${path}hat-${color}.svg`);
+
+
+  const delay = Math.floor(Math.random() * 1000);
+  body.style.animationName = 'bounce-body-short';
+  body.style.animationDuration = '1s';
+  body.style.animationIterationCount = 'infinite';
+  body.style.animationDelay = `${delay}ms`;
+
+  hat.style.animationName = 'bounce-hat-short';
+  hat.style.animationDuration = '1s';
+  hat.style.animationIterationCount = 'infinite';
+  hat.style.animationDelay = `${delay}ms`;
+
 
   characterContainer.appendChild(body);
   characterContainer.appendChild(hat);

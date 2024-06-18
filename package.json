@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && copy src\\html\\* dist && copy src\\css\\* dist && copy src\\assets\\* dist\\assets\\"
+    "build": "tsc && copy src\\html\\* dist && copy src\\css\\* dist && copy src\\assets\\img\\* dist\\assets\\img\\ && copy src\\assets\\imgFlip\\* dist\\assets\\imgFlip\\"
   },
   "keywords": [],
   "author": "",
