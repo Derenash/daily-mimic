@@ -1,0 +1,16 @@
+{
+  "name": "daily-mimic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && copy src\\html\\* dist && copy src\\css\\* dist && copy src\\assets\\* dist\\assets\\"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}

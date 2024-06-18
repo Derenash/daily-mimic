@@ -1,0 +1,185 @@
+:root {
+  --top-top: -80px;
+  --top-mid: 0px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #382F2F;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  position: relative;
+  height: 1000px;
+  width: 1000px;
+}
+
+h1 {
+  color: #333;
+}
+
+p {
+  color: #666;
+}
+
+@keyframes bounce-body-long {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    /* 
+      rotate it 10 degress  
+      set scale to 1.05, 0.9
+      change the position to 10px, 0px
+      */
+    transform: scale(1.05, 0.75) translate(0, 18%);
+  }
+}
+
+@keyframes bounce-body-short {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    /* 
+      rotate it 10 degress  
+      set scale to 1.05, 0.9
+      change the position to 10px, 0px
+      */
+    transform: scale(1.03, 0.90) translate(0, 6.5%);
+  }
+}
+
+@keyframes bounce-hat-short {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    /* 
+      rotate it 10 degress  
+      set scale to 1.05, 0.9
+      change the position to 10px, 0px
+      */
+    transform: scale(1.01, 1) rotate(3deg) translate(1.5%, 6%)
+  }
+}
+
+@keyframes bounce-hat-long {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    /* 
+      rotate it 10 degress  
+      set scale to 1.05, 0.9
+      change the position to 10px, 0px
+      */
+    transform: scale(1.02, 1) rotate(6deg) translate(3.3%, 13%)
+  }
+}
+
+
+@keyframes jump-body-long {
+
+  0%,
+  100% {
+    transform: scale(1);
+    top: var(--top-mid);
+  }
+
+  10%,
+  90% {
+    transform: scale(1.2, 0.8);
+    top: var(--top-mid);
+
+  }
+
+  30%,
+  70% {
+    transform: scale(0.8, 1.2);
+  }
+
+  50% {
+    transform: scale(0.9, 1.1);
+    top: var(--top-top);
+  }
+
+}
+
+@keyframes jump-hat-long {
+
+  0%,
+  100% {
+    transform: scale(1);
+    top: var(--top-mid);
+  }
+
+  10%,
+  90% {
+    transform: rotate(8deg) scale(1.14, 0.95) translate(3%, 0);
+    top: var(--top-mid);
+
+  }
+
+  30%,
+  70% {
+    transform: scale(0.83, 1.12) translate(0, 0);
+  }
+
+  50% {
+    transform: scale(0.9, 1.1) translate(0, 0);
+    top: var(--top-top);
+  }
+}
+
+.character.body {
+  animation: bounce-body-short 2s infinite;
+}
+
+.character.hat {
+  animation: bounce-hat-short 2s infinite;
+}
+
+.character.body.jump {
+  animation-name: jump-body-long;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.character.hat.jump {
+  animation-name: jump-hat-long;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.character {
+  position: absolute;
+  top: 50%;
+}
+
+.character-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.character-container-container {
+  position: absolute;
+}
