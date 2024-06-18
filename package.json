@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && copy src\\html\\* dist && copy src\\css\\* dist && copy src\\assets\\img\\* dist\\assets\\img\\ && copy src\\assets\\imgFlip\\* dist\\assets\\imgFlip\\"
+    "build": "tsc && node scripts/copy-files.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "fs-extra": "^10.1.0",
+    "glob": "^7.2.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
