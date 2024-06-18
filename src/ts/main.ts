@@ -33,10 +33,10 @@ function createCharacter(color: string, position: { x: number, y: number }): HTM
   const characterContainer = document.createElement('div');
   characterContainer.classList.add('character-container');
 
-  let path = "assets/img/"
+  let path = "../assets/img/"
 
   if (position.x % 2 == 0) {
-    path = "assets/imgFlip/"
+    path = "../assets/imgFlip/"
   }
 
   const body = createCharacterElement('body', `${path}body.svg`);
