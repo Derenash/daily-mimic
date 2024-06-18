@@ -168,6 +168,19 @@ p {
   animation-iteration-count: infinite;
 }
 
+
+.character.body.idle {
+  animation-name: bounce-body-short;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+.character.hat.idle {
+  animation-name: bounce-hat-short;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
 .character {
   position: absolute;
   top: 50%;

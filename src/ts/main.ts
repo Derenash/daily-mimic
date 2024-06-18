@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
   createMultipleCharacters(main, 10, 1280, 720);
-  const characters = document.querySelectorAll<HTMLImageElement>('.character');
+  const characters = document.querySelectorAll<HTMLImageElement>('.character-container');
 
   addJumpEventListener(characters);
   addClickEventListener(characters);
@@ -42,17 +42,10 @@ function createCharacter(color: string, position: { x: number, y: number }): HTM
   const body = createCharacterElement('body', `${path}body.svg`);
   const hat = createCharacterElement('hat', `${path}hat-${color}.svg`);
 
+  body.classList.add('idle');
+  hat.classList.add('idle');
 
-  const delay = Math.floor(Math.random() * 1000);
-  body.style.animationName = 'bounce-body-short';
-  body.style.animationDuration = '1s';
-  body.style.animationIterationCount = 'infinite';
-  body.style.animationDelay = `${delay}ms`;
-
-  hat.style.animationName = 'bounce-hat-short';
-  hat.style.animationDuration = '1s';
-  hat.style.animationIterationCount = 'infinite';
-  hat.style.animationDelay = `${delay}ms`;
+  setDelayToCharacters([body, hat], 1000);
 
 
   characterContainer.appendChild(body);
@@ -76,21 +69,37 @@ function createCharacterElement(className: string, src: string): HTMLImageElemen
   return element;
 }
 
-function addJumpEventListener(characters: NodeListOf<HTMLImageElement>): void {
-  if (characters.length > 0) {
+function addJumpEventListener(charactersContainers: NodeListOf<HTMLImageElement>): void {
+  if (charactersContainers.length > 0) {
     document.addEventListener('keydown', (event: KeyboardEvent) => {
       if (event.code === 'Space') {
-        characters.forEach(character => {
-          character.classList.add('jump');
-          setTimeout(() => {
-            character.classList.remove('jump');
-          }, 3000);
+        charactersContainers.forEach(characterContainer => {
+          const characters = characterContainer.querySelectorAll<HTMLImageElement>('.character');
+          const delay = setDelayToCharacters(characters, 1000);
+          characters.forEach(character => {
+            character.classList.remove('idle');
+            character.classList.add('jump');
+            setTimeout(() => {
+              character.classList.remove('jump');
+              character.classList.add('idle');
+            }, 3000 + delay);
+          });
         });
       }
     });
   } else {
     console.error("No characters found");
   }
+}
+
+// Sets a random delay to all characters
+// Same delay for all characters
+function setDelayToCharacters(characters: HTMLImageElement[] | NodeListOf<HTMLImageElement>, max: number, fixed?: number): number {
+  const delay = Math.floor(Math.random() * max);
+  characters.forEach(character => {
+    character.style.animationDelay = `${delay}ms`;
+  });
+  return delay;
 }
 
 function addClickEventListener(characters: NodeListOf<HTMLImageElement>): void {
