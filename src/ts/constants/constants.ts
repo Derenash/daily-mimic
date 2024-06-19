@@ -51,7 +51,7 @@ export const blobNamesPTBR = [
   "Trufa", "Zorro", "Bubu", "Ziggy", "Lolly", "Moti", "Totty", "Petty",
   "Moly", "Simba", "Bruno", "Blush", "Lupe", "Lupin", "Neve",
   "Keyan", "Corgan", "Sipher", "Luiza", "Pedro", "Lucas", "Kirari",
-  "Leozin", "Thunder", "Vulpis", "Crono"
+  "Leozin", "Thunder", "Vulpis", "Crono", "Bonny", "Theo"
 ];
 
 export const blobConfig: BlobConfig = {
