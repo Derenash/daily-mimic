@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "es2015",
+    "moduleResolution": "node",
     "outDir": "dist/js",
     "strict": true,
     "esModuleInterop": true
   },
   "include": [
     "src/ts",
-    "src/ts/components"
+    "src/ts/utils",
+    "src/ts/constants"
   ]
 }

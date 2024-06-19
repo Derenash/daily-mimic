@@ -1,111 +1,81 @@
+import { blobNamesPTBR } from './constants/index.js';
+import { createMainElement, createMultipleCharacters } from './utils/index.js';
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  const color = getRandomColor();
-  const main = document.querySelector('main');
+  const main = createMainElement();
+  // document.body.appendChild(main);
+
   if (!main) {
     console.error("No main found");
     return;
   }
-  createMultipleCharacters(main, 10, 1280, 720);
-  const characters = document.querySelectorAll<HTMLImageElement>('.character-container');
 
-  addJumpEventListener(characters);
-  addClickEventListener(characters);
+  createMultipleCharacters(main, 9, blobNamesPTBR);
 });
 
-function createMultipleCharacters(parent: HTMLElement, amount: number, maximumX: number, maximumY: number): void {
-  for (let i = 0; i < amount; i++) {
-    const position = {
-      x: Math.floor(Math.random() * maximumX),
-      y: Math.floor(Math.random() * maximumY)
-    };
-    const color = getRandomColor();
-    const character = createCharacter(color, position);
-    parent.appendChild(character);
-  }
+
+
+// const box: HTMLElement = document.querySelector('.box') as HTMLElement;
+const box = document.createElement('img');
+box.classList.add('box');
+box.src = '../assets/img/body.svg';
+box.draggable = false
+document.body.appendChild(box);
+
+let startTime: number;
+
+// add drag mechanic to box 
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+interface LerpConfig {
+  min: number;
+  max: number;
+  halfCycle: number;
 }
 
-function createCharacter(color: string, position: { x: number, y: number }): HTMLDivElement {
-  const characterContainerContainer = document.createElement('div');
-  characterContainerContainer.classList.add('character-container-container');
-  characterContainerContainer.style.left = `${position.x}px`;
-  characterContainerContainer.style.top = `${position.y}px`;
-
-  const characterContainer = document.createElement('div');
-  characterContainer.classList.add('character-container');
-
-  let path = "../assets/img/"
-
-  if (position.x % 2 == 0) {
-    path = "../assets/imgFlip/"
-  }
-
-  const body = createCharacterElement('body', `${path}body.svg`);
-  const hat = createCharacterElement('hat', `${path}hat-${color}.svg`);
-
-  body.classList.add('idle');
-  hat.classList.add('idle');
-
-  setDelayToCharacters([body, hat], 1000);
-
-
-  characterContainer.appendChild(body);
-  characterContainer.appendChild(hat);
-  characterContainerContainer.appendChild(characterContainer);
-
-  return characterContainerContainer;
-}
-
-function getRandomColor(): string {
-  const colors = ['blue', 'green', 'red', 'orange'];
-  const random = Math.floor(Math.random() * colors.length);
-  return colors[random];
-}
-
-function createCharacterElement(className: string, src: string): HTMLImageElement {
-  const element = document.createElement('img');
-  element.classList.add('character', className);
-  element.src = src;
-  element.alt = "Character";
-  return element;
-}
-
-function addJumpEventListener(charactersContainers: NodeListOf<HTMLImageElement>): void {
-  if (charactersContainers.length > 0) {
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
-      if (event.code === 'Space') {
-        charactersContainers.forEach(characterContainer => {
-          const characters = characterContainer.querySelectorAll<HTMLImageElement>('.character');
-          const delay = setDelayToCharacters(characters, 1000);
-          characters.forEach(character => {
-            character.classList.remove('idle');
-            character.classList.add('jump');
-            setTimeout(() => {
-              character.classList.remove('jump');
-              character.classList.add('idle');
-            }, 3000 + delay);
-          });
-        });
-      }
-    });
+function getLerp(cfg: LerpConfig, elapsed: number) {
+  const progress = (elapsed / (cfg.halfCycle * 2)) % 1;
+  if (progress < 0.5) {
+    return cfg.min + (cfg.max - cfg.min) * (progress * 2);
   } else {
-    console.error("No characters found");
+    return cfg.max - (cfg.max - cfg.min) * ((progress - 0.5) * 2);
   }
 }
 
-// Sets a random delay to all characters
-// Same delay for all characters
-function setDelayToCharacters(characters: HTMLImageElement[] | NodeListOf<HTMLImageElement>, max: number, fixed?: number): number {
-  const delay = Math.floor(Math.random() * max);
-  characters.forEach(character => {
-    character.style.animationDelay = `${delay}ms`;
-  });
-  return delay;
+function updateScale(timestamp: number) {
+  if (!startTime) startTime = timestamp;
+  const elapsed = (timestamp - startTime);
+  const scaleX = getLerp({ min: 0.9, max: 1.1, halfCycle: 120 }, elapsed);
+  const scaleY = getLerp({ min: 1.1, max: 0.9, halfCycle: 120 }, elapsed);
+  const rotate = getLerp({ min: -10, max: 10, halfCycle: 200 }, elapsed);
+  box.style.transform = `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`;
+  if (isDragging === false) {
+    console.log("not dragging")
+    return;
+  }
+  requestAnimationFrame(updateScale);
 }
 
-function addClickEventListener(characters: NodeListOf<HTMLImageElement>): void {
-  characters.forEach(character => {
-    character.addEventListener('click', () => {
-      console.log("click");
-    });
-  });
-}
+box.addEventListener('mousedown', (event) => {
+  console.log('mousedown')
+  isDragging = true;
+  offsetX = event.offsetX;
+  offsetY = event.offsetY;
+  requestAnimationFrame(updateScale);
+});
+
+document.addEventListener('mouseup', () => {
+  console.log('mouseup')
+  isDragging = false;
+});
+
+document.addEventListener('mousemove', (event) => {
+  console.log('mousemove')
+  if (isDragging) {
+    box.style.left = `${event.clientX - offsetX}px`;
+    box.style.top = `${event.clientY - offsetY}px`;
+  }
+});

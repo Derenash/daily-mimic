@@ -1,3 +1,4 @@
+/* Add the Google Fonts import */
 :root {
   --top-top: -80px;
   --top-mid: 0px;
@@ -14,8 +15,6 @@ body {
 
 main {
   position: relative;
-  width: 1280px;
-  height: 720px;
 }
 
 h1 {
@@ -168,7 +167,6 @@ p {
   animation-iteration-count: infinite;
 }
 
-
 .character.body.idle {
   animation-name: bounce-body-short;
   animation-duration: 1s;
@@ -183,7 +181,6 @@ p {
 
 .character {
   position: absolute;
-  top: 50%;
 }
 
 .character-container {
@@ -191,8 +188,27 @@ p {
   justify-content: center;
   align-items: center;
   position: relative;
+  height: 74px;
 }
 
 .character-container-container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.character-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: 18px;
+  color: #FFFFFF;
+  font-weight: 500;
+  /* -webkit-text-stroke: 1px #000000; */
+  text-shadow: 0.000em 0.075em black, 0.029em 0.069em black, 0.053em 0.053em black, 0.069em 0.029em black, 0.075em 0.000em black, 0.069em -0.029em black, 0.053em -0.053em black, 0.029em -0.069em black, 0.000em -0.075em black, -0.029em -0.069em black, -0.053em -0.053em black, -0.069em -0.029em black, -0.075em -0.000em black, -0.069em 0.029em black, -0.053em 0.053em black, -0.029em 0.069em black;
+  margin-top: -2px;
+}
+
+.box {
   position: absolute;
 }
