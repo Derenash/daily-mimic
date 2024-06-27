@@ -1,81 +1,66 @@
-import { blobNamesPTBR } from './constants/index.js';
-import { createMainElement, createMultipleCharacters } from './utils/index.js';
+import { level_0 } from './levels/level_0.js';
+import { applyAllInitialStyles, createMainElement, drawGroup } from './utils/index.js';
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const main = createMainElement();
-  // document.body.appendChild(main);
+  // apply all styles
+  applyAllInitialStyles();
+  const main: HTMLElement = createMainElement();
+  main.className = 'game-container';
+  document.body.appendChild(main);
 
   if (!main) {
     console.error("No main found");
     return;
   }
 
-  createMultipleCharacters(main, 9, blobNamesPTBR);
-});
+  const level = level_0();
+  const groups = level.groups;
 
+  const topRow = document.createElement('div');
+  topRow.className = 'group';
+  topRow.classList.add('top');
+  const middleRow = document.createElement('div');
+  middleRow.className = 'middle-row';
+  const bottomRow = document.createElement('div');
+  bottomRow.className = 'group';
+  bottomRow.classList.add('bottom');
 
+  const leftColumn = document.createElement('div');
+  leftColumn.className = 'group';
+  leftColumn.classList.add('left');
+  const rightColumn = document.createElement('div');
+  rightColumn.className = 'group';
+  rightColumn.classList.add('right');
 
-// const box: HTMLElement = document.querySelector('.box') as HTMLElement;
-const box = document.createElement('img');
-box.classList.add('box');
-box.src = '../assets/img/body.svg';
-box.draggable = false
-document.body.appendChild(box);
+  middleRow.appendChild(leftColumn);
+  middleRow.appendChild(rightColumn);
+  // main.appendChild(topRow);
+  main.appendChild(middleRow);
+  main.appendChild(bottomRow);
 
-let startTime: number;
+  groups.forEach(group => {
+    let target: HTMLElement | null = null;
+    switch (group.side) {
+      case 'top':
+        target = topRow;
+        break;
+      case 'left':
+        target = leftColumn;
+        break;
+      case 'right':
+        target = rightColumn;
+        break;
+      case 'bottom':
+        target = bottomRow;
+        break;
+      default:
+        console.error('Invalid side');
+        return;
+    }
+    drawGroup(target, group);
 
-// add drag mechanic to box 
-let isDragging = false;
-let offsetX = 0;
-let offsetY = 0;
+  })
 
-interface LerpConfig {
-  min: number;
-  max: number;
-  halfCycle: number;
-}
-
-function getLerp(cfg: LerpConfig, elapsed: number) {
-  const progress = (elapsed / (cfg.halfCycle * 2)) % 1;
-  if (progress < 0.5) {
-    return cfg.min + (cfg.max - cfg.min) * (progress * 2);
-  } else {
-    return cfg.max - (cfg.max - cfg.min) * ((progress - 0.5) * 2);
-  }
-}
-
-function updateScale(timestamp: number) {
-  if (!startTime) startTime = timestamp;
-  const elapsed = (timestamp - startTime);
-  const scaleX = getLerp({ min: 0.9, max: 1.1, halfCycle: 120 }, elapsed);
-  const scaleY = getLerp({ min: 1.1, max: 0.9, halfCycle: 120 }, elapsed);
-  const rotate = getLerp({ min: -10, max: 10, halfCycle: 200 }, elapsed);
-  box.style.transform = `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`;
-  if (isDragging === false) {
-    console.log("not dragging")
-    return;
-  }
-  requestAnimationFrame(updateScale);
-}
-
-box.addEventListener('mousedown', (event) => {
-  console.log('mousedown')
-  isDragging = true;
-  offsetX = event.offsetX;
-  offsetY = event.offsetY;
-  requestAnimationFrame(updateScale);
-});
-
-document.addEventListener('mouseup', () => {
-  console.log('mouseup')
-  isDragging = false;
-});
-
-document.addEventListener('mousemove', (event) => {
-  console.log('mousemove')
-  if (isDragging) {
-    box.style.left = `${event.clientX - offsetX}px`;
-    box.style.top = `${event.clientY - offsetY}px`;
-  }
+  // createMultipleCharacters(main, 9, blobNamesPTBR);
 });

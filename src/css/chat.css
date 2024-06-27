@@ -1,0 +1,118 @@
+.chat-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.group.bottom .chat-container,
+.group.top .chat-container {
+  --remaining-space: calc(var(--group-height) - var(--group-gap) - var(--character-container-actual-size));
+  width: calc(var(--remaining-space) * 2);
+  height: var(--remaining-space);
+}
+
+.group.left .chat-container,
+.group.right .chat-container {
+  --remaining-space: calc(var(--group-width) - var(--group-gap) - var(--character-container-actual-size));
+  width: var(--remaining-space);
+  height: calc(var(--remaining-space) / 2);
+}
+
+.chat-rectangle {
+  width: 100%;
+  height: 100%;
+  /* should be 50% of its height */
+  border-radius: var(--chat-border-radius);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.chat-rectangle.fill {
+  background: #D9D9D9;
+  position: absolute;
+  z-index: 12;
+}
+
+.chat-rectangle.stroke {
+  outline-width: calc(var(--stroke-width));
+  outline-style: solid;
+  outline-color: var(--stroke-color);
+  border-radius: var(--chat-border-radius);
+  z-index: 0;
+}
+
+.chat-container:hover {
+  --stroke-width: 4px;
+}
+
+.bubble {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  overflow: visible;
+  z-index: 1;
+}
+
+
+.bubble.bottom.right {
+  bottom: 0;
+  --bubble-transform: translate(-150%, calc(100% - 4px));
+  right: 0;
+}
+
+.bubble.bottom.left {
+  bottom: 0;
+  --bubble-transform: translate(150%, calc(100% - 4px)) scaleX(-1);
+  left: 0;
+}
+
+.bubble.left {
+  left: -8px;
+  top: 55%;
+  --bubble-transform: rotate(45deg);
+}
+
+.bubble.right {
+  right: -8px;
+  top: 55%;
+  transform: translateX(100%);
+  --bubble-transform: rotate(-45deg) scaleX(-1);
+}
+
+.bubble .stroke {
+  stroke: var(--stroke-color);
+  stroke-width: calc(var(--stroke-width));
+  stroke-linejoin: round;
+}
+
+.bubble .fill {
+  fill: #D9D9D9;
+}
+
+.bubble path {
+  transform: var(--bubble-transform);
+}
+
+.chat-container line {
+  z-index: 25;
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 600;
+  font-size: calc(36px - (var(--character-proportion) * 8px));
+  line-height: calc(36px - (var(--character-proportion) * 8px));
+  color: black;
+}
+
+/* 
+truth {
+  color: #197FDE;
+  font-weight: 800;
+}
+
+lie {
+  color: #E03600;
+  font-weight: 800;
+} */

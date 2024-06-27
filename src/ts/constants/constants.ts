@@ -1,4 +1,38 @@
-import { BlobConfig, BoardConfig } from "../types/configTypes";
+import { BlobType, BlobTypeStyle, BlobConfig, BoardConfig } from "../types/index.js";
+
+export const blobColor = {
+  RED: "red",
+  BLUE: "blue",
+  GREEN: "green",
+  ORANGE: "orange",
+} as const;
+
+export const blobColors = Object.values(blobColor);
+
+export const blobType = {
+  TRUTH: "truth",
+  LIE: "lie"
+} as const;
+
+export const blobTypeStyles: Record<BlobType, BlobTypeStyle> = {
+  [blobType.TRUTH]: {
+    color: '#197FDE',
+    fontWeight: 800,
+  },
+  [blobType.LIE]: {
+    color: '#E03600',
+    fontWeight: 800,
+  },
+};
+
+export const groupSide = {
+  LEFT: "left",
+  RIGHT: "right",
+  TOP: "top",
+  BOTTOM: "bottom"
+} as const;
+
+export const groupSides = Object.values(groupSide);
 
 export const blobNamesENUS = [
   "Blinky", "Squishy", "Fluffy", "Nibbles", "Puff", "Wiggly", "Bounce",
@@ -61,6 +95,6 @@ export const blobConfig: BlobConfig = {
 };
 
 export const boardConfig: BoardConfig = {
-  width: 800,
-  height: 600
+  width: 768,
+  height: 800
 };

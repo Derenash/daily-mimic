@@ -1,7 +1,15 @@
-/* Add the Google Fonts import */
 :root {
   --top-top: -80px;
   --top-mid: 0px;
+  --stroke-width: 2px;
+  --stroke-color: red;
+  --chat-border-radius: 50px;
+  --character-container-size: 100px;
+  --character-proportion: 1;
+  --character-container-actual-size: calc(var(--character-container-size) * var(--character-proportion));
+  --game-width: 768px;
+  --side-group-gap: 15px;
+  --bottom-group-gap: 20px;
 }
 
 body {
@@ -13,8 +21,63 @@ body {
   align-items: center;
 }
 
-main {
-  position: relative;
+.game-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  width: var(--game-width);
+  /* height: var(--game-height); */
+  /* gap: 20px; */
+}
+
+.group {
+  display: flex;
+  height: var(--group-height);
+  width: var(--group-width);
+  gap: var(--group-gap)
+}
+
+.group.top,
+.group.bottom {
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  /* max-height: 250px; */
+  /* flex-grow: 1; */
+  --group-gap: 20px;
+  --side-size: calc(var(--game-width) / 2);
+  --side-chat-size: calc((var(--side-size) - var(--character-container-actual-size)) - var(--side-group-gap));
+  --bottom-chat-size: calc(var(--side-chat-size) / 2);
+  --group-height: calc(var(--bottom-chat-size) + var(--character-container-actual-size) + var(--group-gap));
+  --group-width: 100%;
+}
+
+.group.left,
+.group.right {
+  justify-content: space-evenly;
+  flex-direction: column;
+  --group-gap: var(--side-group-gap);
+  --group-height: 100%;
+  --group-width: calc(var(--game-width) / 2);
+  padding: 0 10px;
+}
+
+.group.left {
+  align-items: flex-end;
+}
+
+.group.right {
+  align-items: flex-start;
+}
+
+.middle-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  min-height: 500px;
 }
 
 h1 {
@@ -25,160 +88,6 @@ p {
   color: #666;
 }
 
-@keyframes bounce-body-long {
-
-  0%,
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
-
-  50% {
-    /* 
-      rotate it 10 degress  
-      set scale to 1.05, 0.9
-      change the position to 10px, 0px
-      */
-    transform: scale(1.05, 0.75) translate(0, 18%);
-  }
-}
-
-@keyframes bounce-body-short {
-
-  0%,
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
-
-  50% {
-    /* 
-      rotate it 10 degress  
-      set scale to 1.05, 0.9
-      change the position to 10px, 0px
-      */
-    transform: scale(1.03, 0.90) translate(0, 6.5%);
-  }
-}
-
-@keyframes bounce-hat-short {
-
-  0%,
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
-
-  50% {
-    /* 
-      rotate it 10 degress  
-      set scale to 1.05, 0.9
-      change the position to 10px, 0px
-      */
-    transform: scale(1.01, 1) rotate(3deg) translate(1.5%, 6%)
-  }
-}
-
-@keyframes bounce-hat-long {
-
-  0%,
-  100% {
-    transform: scale(1) translate(0, 0);
-  }
-
-  50% {
-    /* 
-      rotate it 10 degress  
-      set scale to 1.05, 0.9
-      change the position to 10px, 0px
-      */
-    transform: scale(1.02, 1) rotate(6deg) translate(3.3%, 13%)
-  }
-}
-
-
-@keyframes jump-body-long {
-
-  0%,
-  100% {
-    transform: scale(1);
-    top: var(--top-mid);
-  }
-
-  10%,
-  90% {
-    transform: scale(1.2, 0.8);
-    top: var(--top-mid);
-
-  }
-
-  30%,
-  70% {
-    transform: scale(0.8, 1.2);
-  }
-
-  50% {
-    transform: scale(0.9, 1.1);
-    top: var(--top-top);
-  }
-
-}
-
-@keyframes jump-hat-long {
-
-  0%,
-  100% {
-    transform: scale(1);
-    top: var(--top-mid);
-  }
-
-  10%,
-  90% {
-    transform: rotate(8deg) scale(1.14, 0.95) translate(3%, 0);
-    top: var(--top-mid);
-
-  }
-
-  30%,
-  70% {
-    transform: scale(0.83, 1.12) translate(0, 0);
-  }
-
-  50% {
-    transform: scale(0.9, 1.1) translate(0, 0);
-    top: var(--top-top);
-  }
-}
-
-/* .character.body {
-  animation: bounce-body-long 0.7s infinite;
-}
-
-.character.hat {
-  animation: bounce-hat-long 0.7s infinite;
-} */
-
-.character.body.jump {
-  animation-name: jump-body-long;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-}
-
-.character.hat.jump {
-  animation-name: jump-hat-long;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-}
-
-.character.body.idle {
-  animation-name: bounce-body-short;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-}
-
-.character.hat.idle {
-  animation-name: bounce-hat-short;
-  animation-duration: 1s;
-  animation-iteration-count: infinite;
-}
-
 .character {
   position: absolute;
 }
@@ -187,26 +96,66 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   position: relative;
-  height: 74px;
+  height: var(--character-container-actual-size);
+  transform: scale(var(--character-proportion), var(--character-proportion));
+}
+
+.character-container-container-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.character-container-container-container.right {
+  flex-direction: row-reverse;
+  align-items: center;
+  width: 100%;
+  gap: var(--side-group-gap);
+}
+
+.character-container-container-container.left {
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: var(--side-group-gap);
+}
+
+.character-container-container-container.bottom {
+  flex-direction: column-reverse;
+  align-items: center;
+  height: 100%;
+  gap: var(--bottom-group-gap);
+}
+
+.character-container-container-container.top {
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: var(--bottom-group-gap);
 }
 
 .character-container-container {
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: var(--character-container-actual-size);
+  height: var(--character-container-actual-size);
+}
+
+.character-container-container .flip {
+  transform: scale(var(--character-proportion), var(--character-proportion)) matrix(-1, 0, 0, 1, 0, 0);
 }
 
 .character-name {
   font-family: 'Baloo 2', cursive;
-  font-size: 18px;
+  font-size: calc(18px * var(--character-proportion));
+  line-height: calc(18px * var(--character-proportion));
   color: #FFFFFF;
   font-weight: 500;
-  /* -webkit-text-stroke: 1px #000000; */
   text-shadow: 0.000em 0.075em black, 0.029em 0.069em black, 0.053em 0.053em black, 0.069em 0.029em black, 0.075em 0.000em black, 0.069em -0.029em black, 0.053em -0.053em black, 0.029em -0.069em black, 0.000em -0.075em black, -0.029em -0.069em black, -0.053em -0.053em black, -0.069em -0.029em black, -0.075em -0.000em black, -0.069em 0.029em black, -0.053em 0.053em black, -0.029em 0.069em black;
-  margin-top: -2px;
+  transform: translateY(-15%);
 }
 
 .box {

@@ -1,0 +1,1440 @@
+Folder: css
+==================================================
+File: animations.css
+
+@keyframes bounce-body-long {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    transform: scale(1.05, 0.75) translate(0, 18%);
+  }
+}
+
+@keyframes bounce-body-short {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    transform: scale(1.03, 0.90) translate(0, 6.5%);
+  }
+}
+
+@keyframes bounce-hat-short {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    transform: scale(1.01, 1) rotate(3deg) translate(1.5%, 6%)
+  }
+}
+
+@keyframes bounce-hat-long {
+
+  0%,
+  100% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  50% {
+    transform: scale(1.02, 1) rotate(6deg) translate(3.3%, 13%)
+  }
+}
+
+@keyframes jump-body-long {
+
+  0%,
+  100% {
+    transform: scale(1);
+    top: var(--top-mid);
+  }
+
+  10%,
+  90% {
+    transform: scale(1.2, 0.8);
+    top: var(--top-mid);
+  }
+
+  30%,
+  70% {
+    transform: scale(0.8, 1.2);
+  }
+
+  50% {
+    transform: scale(0.9, 1.1);
+    top: var(--top-top);
+  }
+}
+
+@keyframes jump-hat-long {
+
+  0%,
+  100% {
+    transform: scale(1);
+    top: var(--top-mid);
+  }
+
+  10%,
+  90% {
+    transform: rotate(8deg) scale(1.14, 0.95) translate(3%, 0);
+    top: var(--top-mid);
+  }
+
+  30%,
+  70% {
+    transform: scale(0.83, 1.12) translate(0, 0);
+  }
+
+  50% {
+    transform: scale(0.9, 1.1) translate(0, 0);
+    top: var(--top-top);
+  }
+}
+
+.character.body.jump {
+  animation-name: jump-body-long;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.character.hat.jump {
+  animation-name: jump-hat-long;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.character.body.idle {
+  animation-name: bounce-body-short;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+
+.character.hat.idle {
+  animation-name: bounce-hat-short;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
+--------------------
+File: chat.css
+
+.chat-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
+
+.group.bottom .chat-container,
+.group.top .chat-container {
+  --remaining-space: calc(var(--group-height) - var(--group-gap) - var(--character-container-actual-size));
+  width: calc(var(--remaining-space) * 2);
+  height: var(--remaining-space);
+}
+
+.group.left .chat-container,
+.group.right .chat-container {
+  --remaining-space: calc(var(--group-width) - var(--group-gap) - var(--character-container-actual-size));
+  width: var(--remaining-space);
+  height: calc(var(--remaining-space) / 2);
+}
+
+.chat-rectangle {
+  width: 100%;
+  height: 100%;
+  /* should be 50% of its height */
+  border-radius: var(--chat-border-radius);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.chat-rectangle.fill {
+  background: #D9D9D9;
+  position: absolute;
+  z-index: 12;
+}
+
+.chat-rectangle.stroke {
+  outline-width: calc(var(--stroke-width));
+  outline-style: solid;
+  outline-color: var(--stroke-color);
+  border-radius: var(--chat-border-radius);
+  z-index: 0;
+}
+
+.chat-container:hover {
+  --stroke-width: 4px;
+}
+
+.bubble {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  overflow: visible;
+  z-index: 1;
+}
+
+
+.bubble.bottom.right {
+  bottom: 0;
+  --bubble-transform: translate(-150%, calc(100% - 4px));
+  right: 0;
+}
+
+.bubble.bottom.left {
+  bottom: 0;
+  --bubble-transform: translate(150%, calc(100% - 4px)) scaleX(-1);
+  left: 0;
+}
+
+.bubble.left {
+  left: -8px;
+  top: 55%;
+  --bubble-transform: rotate(45deg);
+}
+
+.bubble.right {
+  right: -8px;
+  top: 55%;
+  transform: translateX(100%);
+  --bubble-transform: rotate(-45deg) scaleX(-1);
+}
+
+.bubble .stroke {
+  stroke: var(--stroke-color);
+  stroke-width: calc(var(--stroke-width));
+  stroke-linejoin: round;
+}
+
+.bubble .fill {
+  fill: #D9D9D9;
+}
+
+.bubble path {
+  transform: var(--bubble-transform);
+}
+
+.chat-container line {
+  z-index: 25;
+  font-family: 'Baloo 2';
+  font-style: normal;
+  font-weight: 600;
+  font-size: calc(36px - (var(--character-proportion) * 8px));
+  line-height: calc(36px - (var(--character-proportion) * 8px));
+  color: black;
+}
+
+truth {
+  color: #197FDE;
+  font-weight: 800;
+}
+
+lie {
+  color: #E03600;
+  font-weight: 800;
+}
+--------------------
+File: styles.css
+
+:root {
+  --top-top: -80px;
+  --top-mid: 0px;
+  --stroke-width: 2px;
+  --stroke-color: red;
+  --chat-border-radius: 50px;
+  --character-container-size: 100px;
+  --character-proportion: 1;
+  --character-container-actual-size: calc(var(--character-container-size) * var(--character-proportion));
+  --game-width: 768px;
+  --side-group-gap: 15px;
+  --bottom-group-gap: 20px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #382F2F;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  width: var(--game-width);
+  /* height: var(--game-height); */
+  /* gap: 20px; */
+}
+
+.group {
+  display: flex;
+  height: var(--group-height);
+  width: var(--group-width);
+  gap: var(--group-gap)
+}
+
+.group.top,
+.group.bottom {
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: row;
+  /* max-height: 250px; */
+  /* flex-grow: 1; */
+  --group-gap: 20px;
+  --side-size: calc(var(--game-width) / 2);
+  --side-chat-size: calc((var(--side-size) - var(--character-container-actual-size)) - var(--side-group-gap));
+  --bottom-chat-size: calc(var(--side-chat-size) / 2);
+  --group-height: calc(var(--bottom-chat-size) + var(--character-container-actual-size) + var(--group-gap));
+  --group-width: 100%;
+}
+
+.group.left,
+.group.right {
+  justify-content: space-evenly;
+  flex-direction: column;
+  --group-gap: var(--side-group-gap);
+  --group-height: 100%;
+  --group-width: calc(var(--game-width) / 2);
+  padding: 0 10px;
+}
+
+.group.left {
+  align-items: flex-end;
+}
+
+.group.right {
+  align-items: flex-start;
+}
+
+.middle-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  min-height: 500px;
+}
+
+h1 {
+  color: #333;
+}
+
+p {
+  color: #666;
+}
+
+.character {
+  position: absolute;
+}
+
+.character-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  height: var(--character-container-actual-size);
+  transform: scale(var(--character-proportion), var(--character-proportion));
+}
+
+.character-container-container-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.character-container-container-container.right {
+  flex-direction: row-reverse;
+  align-items: center;
+  width: 100%;
+  gap: var(--side-group-gap);
+}
+
+.character-container-container-container.left {
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: var(--side-group-gap);
+}
+
+.character-container-container-container.bottom {
+  flex-direction: column-reverse;
+  align-items: center;
+  height: 100%;
+  gap: var(--bottom-group-gap);
+}
+
+.character-container-container-container.top {
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: var(--bottom-group-gap);
+}
+
+.character-container-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: var(--character-container-actual-size);
+  height: var(--character-container-actual-size);
+}
+
+.character-container-container .flip {
+  transform: scale(var(--character-proportion), var(--character-proportion)) matrix(-1, 0, 0, 1, 0, 0);
+}
+
+.character-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: calc(18px * var(--character-proportion));
+  line-height: calc(18px * var(--character-proportion));
+  color: #FFFFFF;
+  font-weight: 500;
+  text-shadow: 0.000em 0.075em black, 0.029em 0.069em black, 0.053em 0.053em black, 0.069em 0.029em black, 0.075em 0.000em black, 0.069em -0.029em black, 0.053em -0.053em black, 0.029em -0.069em black, 0.000em -0.075em black, -0.029em -0.069em black, -0.053em -0.053em black, -0.069em -0.029em black, -0.075em -0.000em black, -0.069em 0.029em black, -0.053em 0.053em black, -0.029em 0.069em black;
+  transform: translateY(-15%);
+}
+
+.box {
+  position: absolute;
+}
+--------------------
+Folder: unused
+==================================================
+File: box.ts
+
+// const box: HTMLElement = document.querySelector('.box') as HTMLElement;
+const box = document.createElement('img');
+box.classList.add('box');
+box.src = '../assets/img/body.svg';
+box.draggable = false
+document.body.appendChild(box);
+
+let startTime: number;
+
+// add drag mechanic to box 
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+interface LerpConfig {
+  min: number;
+  max: number;
+  halfCycle: number;
+}
+
+function getLerp(cfg: LerpConfig, elapsed: number) {
+  const progress = (elapsed / (cfg.halfCycle * 2)) % 1;
+  if (progress < 0.5) {
+    return cfg.min + (cfg.max - cfg.min) * (progress * 2);
+  } else {
+    return cfg.max - (cfg.max - cfg.min) * ((progress - 0.5) * 2);
+  }
+}
+
+function updateScale(timestamp: number) {
+  if (!startTime) startTime = timestamp;
+  const elapsed = (timestamp - startTime);
+  const scaleX = getLerp({ min: 0.95, max: 1.05, halfCycle: 400 }, elapsed);
+  const scaleY = getLerp({ min: 1.05, max: 0.95, halfCycle: 400 }, elapsed);
+  const rotate = getLerp({ min: -10, max: 10, halfCycle: 200 }, elapsed);
+  box.style.transform = `scale(${scaleX}, ${scaleY})`;
+  // box.style.transform = `scale(${scaleX}, ${scaleY}) rotate(${rotate}deg)`;
+  if (isDragging === false) {
+    console.log("not dragging")
+    return;
+  }
+  requestAnimationFrame(updateScale);
+}
+
+box.addEventListener('mousedown', (event) => {
+  console.log('mousedown')
+  isDragging = true;
+  offsetX = event.offsetX;
+  offsetY = event.offsetY;
+  requestAnimationFrame(updateScale);
+});
+
+document.addEventListener('mouseup', () => {
+  console.log('mouseup')
+  isDragging = false;
+});
+
+document.addEventListener('mousemove', (event) => {
+  console.log('mousemove')
+  if (isDragging) {
+    box.style.left = `${event.clientX - offsetX}px`;
+    box.style.top = `${event.clientY - offsetY}px`;
+  }
+});
+--------------------
+File: index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    .speech-bubble {
+      font-family: 'Baloo 2', cursive;
+      position: relative;
+      background: #fff;
+      border-radius: 50%;
+      padding: 20px;
+      width: 250px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      font-size: 1.2em;
+      border: 2px solid #ccc;
+      text-align: center;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 20px;
+      border-style: solid;
+      border-color: #fff transparent transparent transparent;
+      display: block;
+      width: 0;
+    }
+
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -24px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 22px;
+      border-style: solid;
+      border-color: #ccc transparent transparent transparent;
+      display: block;
+      width: 0;
+    }
+  </style>
+  <title>Speech Bubble</title>
+</head>
+
+<body>
+  <div class="speech-bubble">
+    Red hats are lying
+  </div>
+</body>
+
+</html>
+--------------------
+File: test.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Flexbox Layout</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top,
+    .bottom {
+      height: 25%;
+      background-color: lightcoral;
+    }
+
+    .middle {
+      flex: 1;
+      display: flex;
+    }
+
+    .left,
+    .right {
+      flex: 1;
+      background-color: lightgreen;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="group top">Top</div>
+    <div class="middle-row">
+      <div class="group left">Left</div>
+      <div class="group right">Right</div>
+    </div>
+    <div class="group bottom">Bottom</div>
+  </div>
+</body>
+
+</html>
+--------------------
+File: unused.ts
+
+import { setDelayToCharacters } from "../utils";
+
+function addJumpEventListener(charactersContainers: NodeListOf<HTMLImageElement>): void {
+  if (charactersContainers.length > 0) {
+    document.addEventListener('keydown', (event: KeyboardEvent) => {
+      if (event.code === 'Space') {
+        charactersContainers.forEach(characterContainer => {
+          const characters = characterContainer.querySelectorAll<HTMLImageElement>('.character');
+          const delay = setDelayToCharacters(characters, 1000);
+          characters.forEach(character => {
+            character.classList.remove('idle');
+            character.classList.add('jump');
+            setTimeout(() => {
+              character.classList.remove('jump');
+              character.classList.add('idle');
+            }, 3000 + delay);
+          });
+        });
+      }
+    });
+  } else {
+    console.error("No characters found");
+  }
+}
+
+function addClickEventListener(characters: NodeListOf<HTMLImageElement>): void {
+  characters.forEach(character => {
+    character.addEventListener('click', () => {
+      console.log("click");
+    });
+  });
+}
+--------------------
+Folder: html
+==================================================
+File: index.html
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/chat.css">
+  <title>TypeScript Project</title>
+</head>
+
+
+<body>
+  <script type="module" src="../js/main.js"></script>
+
+
+  <!-- <div class="chat-container">
+    <div class="chat-rectangle fill"></div>
+    <div class="chat-rectangle stroke"></div>
+    <svg class="bubble right" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="stroke"
+        d="M12 -1C11.7201 -1 11.453 -0.882699 11.2636 -0.6766C11.0743 -0.470501 10.9799 -0.194469 11.0036 0.0844243C11.2459 2.94486 11.5316 7.6398 10.7658 12.1903C9.99574 16.7659 8.20388 20.9617 4.49411 23.1374C4.04718 23.3995 3.87447 23.9596 4.09617 24.4279C4.31788 24.8962 4.86056 25.1176 5.34657 24.938C8.55486 23.7526 12.9952 20.9569 16.8595 16.7859C20.7332 12.6047 24.0809 6.98386 24.9913 0.13171C25.0292 -0.153961 24.9421 -0.442118 24.7522 -0.658897C24.5624 -0.875676 24.2882 -1 24 -1H18H12Z" />
+      <path class="fill" d="M5 24C13.1846 19.2 12.4872 5.75 12 0H24C22.2462 13.2 11.0897 21.75 5 24Z" />
+    </svg>
+    <line>Todos</line>
+    <line>Laranjas</line>
+    <line>são <true>leais</true>
+    </line>
+  </div> -->
+
+  <!-- <img src="assets/image.png" alt="My Image"> -->
+  <!-- <img class="character" src="assets/minion_red_hat.svg" alt="Character"> -->
+  <!-- <div class="character-container">
+    <img class="character body" src="assets/body.svg" alt="Character">
+    <img class="character hat" src="assets/hat.svg" alt="Character">
+  </div> -->
+  </div>
+
+</body>
+
+</html>
+--------------------
+Folder: ts
+==================================================
+File: main.ts
+
+import { level_0 } from './levels/level_0.js';
+import { createMainElement, drawGroup } from './utils/index.js';
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const main = createMainElement();
+  main.className = 'game-container';
+  document.body.appendChild(main);
+
+  if (!main) {
+    console.error("No main found");
+    return;
+  }
+
+  const level = level_0();
+  const groups = level.groups;
+
+  const topRow = document.createElement('div');
+  topRow.className = 'group';
+  topRow.classList.add('top');
+  const middleRow = document.createElement('div');
+  middleRow.className = 'middle-row';
+  const bottomRow = document.createElement('div');
+  bottomRow.className = 'group';
+  bottomRow.classList.add('bottom');
+
+  const leftColumn = document.createElement('div');
+  leftColumn.className = 'group';
+  leftColumn.classList.add('left');
+  const rightColumn = document.createElement('div');
+  rightColumn.className = 'group';
+  rightColumn.classList.add('right');
+
+  middleRow.appendChild(leftColumn);
+  middleRow.appendChild(rightColumn);
+  // main.appendChild(topRow);
+  main.appendChild(middleRow);
+  main.appendChild(bottomRow);
+
+  let target: HTMLElement | null = null;
+  groups.forEach(group => {
+    if (group.side === 'top') {
+      target = topRow;
+    } else if (group.side === 'left') {
+      target = leftColumn;
+    } else if (group.side === 'right') {
+      target = rightColumn;
+    } else if (group.side === 'bottom') {
+      target = bottomRow;
+    } else {
+      console.error('Invalid side');
+      return;
+    }
+    drawGroup(target, group);
+
+  })
+
+  // createMultipleCharacters(main, 9, blobNamesPTBR);
+});
+--------------------
+Folder: ts/types
+==================================================
+File: blobTypes.ts
+
+export type BlobGroupSide = "left" | "right" | "top" | "bottom";
+export type BlobType = "lie" | "truth";
+export type BlobColor = "red" | "blue" | "green" | "orange";
+
+export interface Level {
+  name: string;
+  minimumLiers: number;
+  maximumLiers: number;
+  liersAmount: number;
+  groups: BlobGroup[];
+}
+
+export interface BlobGroup {
+  blobs: Blob[];
+  side?: BlobGroupSide;
+}
+
+export interface Blob {
+  name: string;
+  color: BlobColor;
+  clue: Clue;
+  side?: BlobGroupSide;
+}
+
+export type Clue = ColorClue | SideClue | SpecificClue | AllClue;
+
+export interface ColorClue {
+  clueType: "color";
+  color: BlobColor;
+  target: ClueTarget;
+  blobType: BlobType;
+}
+
+export interface SideClue {
+  clueType: "side";
+  side: BlobGroupSide;
+  target: ClueTarget;
+  blobType: BlobType;
+}
+
+export interface SpecificClue {
+  clueType: "specific";
+  blobName: string;
+  blobType: BlobType;
+}
+
+export interface AllClue {
+  clueType: "all";
+  amount: number;
+  blobType: BlobType;
+}
+
+export function blobGroup(blobs: Blob[], side?: BlobGroupSide): BlobGroup {
+  return {
+    side: side,
+    blobs: blobs
+  };
+}
+
+export function blob(name: string, color: BlobColor, clue: Clue, side?: BlobGroupSide): Blob {
+  return {
+    name: name,
+    color: color,
+    clue: clue,
+    side: side
+  };
+}
+
+export function clueSide(target: ClueTarget, side: BlobGroupSide, blobType: BlobType): SideClue {
+  return {
+    clueType: "side",
+    side: side,
+    target: target,
+    blobType: blobType
+  };
+}
+
+export function clueColor(target: ClueTarget, color: BlobColor, blobType: BlobType): ColorClue {
+  return {
+    clueType: "color",
+    color: color,
+    target: target,
+    blobType: blobType
+  };
+}
+
+export function clueSpecific(blobName: string, blobType: BlobType): SpecificClue {
+  return {
+    clueType: "specific",
+    blobName: blobName,
+    blobType: blobType
+  };
+}
+
+export function clueAll(amount: number, blobType: BlobType): AllClue {
+  return {
+    clueType: "all",
+    amount: amount,
+    blobType: blobType
+  };
+}
+
+export function targetAll(): ClueTargetAll {
+  return {
+    type: "all"
+  };
+}
+
+export function targetSome(): ClueTargetSome {
+  return {
+    type: "some"
+  };
+}
+
+export function targetQuantity(amount: number): ClueTargetQuantity {
+  return {
+    type: "quantity",
+    amount: amount
+  };
+}
+
+export function targetRange(minimum: number, maximum: number): ClueTargetRange {
+  return {
+    type: "range",
+    minimum: minimum,
+    maximum: maximum
+  };
+}
+
+export type ClueTarget = ClueTargetAll | ClueTargetSome | ClueTargetRange | ClueTargetQuantity;
+
+export interface ClueTargetAll {
+  type: "all";
+}
+
+export interface ClueTargetSome {
+  type: "some";
+}
+
+export interface ClueTargetQuantity {
+  type: "quantity";
+  amount: number;
+}
+
+export interface ClueTargetRange {
+  type: "range";
+  minimum: number;
+  maximum: number;
+}
+--------------------
+File: configTypes.ts
+
+export interface BlobConfig {
+  width: number;
+  height: number;
+  gap: number;
+}
+
+export interface BoardConfig {
+  width: number;
+  height: number;
+}
+--------------------
+File: generalTypes.ts
+
+export interface Position {
+  x: number;
+  y: number;
+}
+--------------------
+File: index.ts
+
+export * from './blobTypes.js';
+export * from './configTypes.js';
+export * from './generalTypes.js';
+--------------------
+Folder: ts/constants
+==================================================
+File: constants.ts
+
+import { BlobConfig, BoardConfig } from "../types/configTypes";
+
+export const blobNamesENUS = [
+  "Blinky", "Squishy", "Fluffy", "Nibbles", "Puff", "Wiggly", "Bounce",
+  "Glimmer", "Twinkle", "Puddle", "Wobble", "Sprout", "Frolic", "Pip",
+  "Flick", "Chirp", "Drift", "Blip", "Glow", "Bubba", "Fizzy",
+  "Whimsy", "Munch", "Splash", "Zippy", "Doodle", "Nuzzle", "Shimmer",
+  "Jelly", "Squidge", "Gusto", "Bloop", "Nibble", "Whisk", "Scoot",
+  "Pippin", "Mellow", "Ripple", "Jolly", "Chuck", "Snappy", "Crinkle",
+  "Smidge", "Lumpy", "Dimples", "Bungee", "Hopper", "Wheeze", "Glee",
+  "Pebble", "Tutter", "Wisp", "Fumble", "Cuddle", "Fizz", "Plop", "Shimmy",
+  "Grin", "Plunk", "Blob", "Squirt", "Squash", "Splodge", "Glance", "Bump",
+  "Giggle", "Quirk", "Pop", "Zap", "Swoosh", "Blurp", "Whirl", "Mirth",
+  "Flutter", "Pookie", "Rustle", "Gobs", "Scramble", "Snug", "Perky", "Pixie",
+  "Gurgle", "Knick", "Knack", "Tweak", "Squig", "Snuggle", "Tinkle", "Zoom",
+  "Yip", "Teeny", "Spice", "Spook", "Sugar", "Blitz", "Crumb", "Dot", "Buzzy",
+  "Dink", "Howl", "Itch", "Hush", "Loopy", "Mimic", "Nomad", "Fluff", "Mojo",
+  "Nappy", "Paddy", "Rusty", "Skipper", "Snooze", "Thud", "Triff", "Splotch",
+  "Roo", "Chubby", "Pom-Pom", "Stuff", "Streak", "Dabble", "Snick", "Whizz",
+  "Starry", "Peppy", "Clip", "Flip", "Fuzzy", "Cloud", "Skip", "Squawk",
+  "Gob", "Granny", "Trix", "Boppy", "Chuckle", "Whisper", "Pup",
+  "Hops", "Snaps", "Dotty", "Twig", "Maple", "Berry", "Finny",
+  "Sniff", "Jazz", "Hum", "Sprung", "Loop", "Butt", "Frizz", "Slope",
+  "Mock", "Giddy", "Jot", "Beetle", "Spunky", "Dash", "Spike", "Tiny", "Spray",
+  "Woody", "Fudge", "Yarn", "Rasp", "Blink", "Drizzle", "Fang", "Claws", "Joy",
+  "Millie", "Seabass", "Spark", "Tum", "Tango", "Crispy", "Marsh", "Pal",
+  "Becky", "Wink", "Grace", "Sprinkles", "Bubblegum", "Cob", "Slap", "Drip",
+  "Vibes", "Belinda", "Cha", "Missy", "Mr. B", "Pipsqueak", "Jest", "Purdy"
+];
+
+export const blobNamesPTBR = [
+  "Pipo", "Bingo", "Toddy", "Bolota", "Frida", "Nina", "Leo", "Pitoco",
+  "Peludo", "Mimi", "Dudu", "Fuba", "Tico", "Bidu", "Catita", "Lili",
+  "Pompom", "Biju", "Chiquinho", "Panda", "Toto", "Tata", "Rabito",
+  "Teco", "Titi", "Fofo", "Rex", "Toquinho", "Teca", "Lilo",
+  "Minty", "Xereta", "Pop", "Kiko", "Mel", "Zeus", "Bento",
+  "Biruta", "Lua", "Cookie", "Luna", "Pipoca", "Zuzu", "Biscoito",
+  "Felix", "Bolinha", "Jujuba", "Bizu", "Bilu", "Panqueca", "Caramelo",
+  "Rubi", "Cacau", "Mei", "Amora", "Bigode", "Feijao", "Preta", "Milk",
+  "Guga", "Jade", "Snow", "Doce", "Lilica", "Vivi", "Magali", "Sol",
+  "Catatau", "Alvin", "Lolita", "Romeu", "Xodo", "Mini", "Yuri", "Brisa",
+  "Formiga", "Estrela", "Sofi", "Torni", "Gigi", "Timao", "Batata",
+  "Zaza", "Mancha", "Nino", "Pirata", "Bobby", "Bella", "Pluto", "Xuxu",
+  "Joy", "Lupi", "Fifi", "Sushi", "Billy", "Honey", "Miuda",
+  "Sid", "Sandy", "Babi", "Babu", "Blitz", "Miki", "Miro", "Tango",
+  "Bolt", "Nene", "Skye", "Poof", "Luz", "Fluffy", "Boop", "Starry",
+  "Bug", "Chirpy", "Hobbit", "Tutu", "Pluma", "Pingo", "Gizmo",
+  "Docinho", "Marsh", "Dali", "Ivy", "Kurumi", "Blu", "Banana", "Foxy",
+  "Goma", "Fanta", "Pirulito", "Tommy", "Rei", "Carlota", "Chorão", "Cria",
+  "Gummy", "Minie", "Moc", "Pepe", "Goldu", "Scooby", "Zenny",
+  "Trufa", "Zorro", "Bubu", "Ziggy", "Lolly", "Moti", "Totty", "Petty",
+  "Moly", "Simba", "Bruno", "Blush", "Lupe", "Lupin", "Neve",
+  "Keyan", "Corgan", "Sipher", "Luiza", "Pedro", "Lucas", "Kirari",
+  "Leozin", "Thunder", "Vulpis", "Crono", "Bonny", "Theo"
+];
+
+export const blobConfig: BlobConfig = {
+  width: 110,
+  height: 74,
+  gap: 30
+};
+
+export const boardConfig: BoardConfig = {
+  width: 768,
+  height: 800
+};
+--------------------
+File: index.ts
+
+export * from './constants.js';
+--------------------
+Folder: ts/utils
+==================================================
+File: animationUtils.ts
+
+export function setDelayToCharacters(characters: HTMLImageElement[] | NodeListOf<HTMLImageElement>, max: number, fixed?: number): number {
+  const delay = Math.floor(Math.random() * max);
+  characters.forEach(character => {
+    character.style.animationDelay = `${delay}ms`;
+  });
+  return delay;
+}
+--------------------
+File: generalUtils.ts
+
+import { blobConfig, boardConfig } from "../constants/index.js";
+import { getBlobText } from "../text/clueToText.js";
+import { BlobGroup, BlobGroupSide, Blob } from "../types/blobTypes.js";
+import { setDelayToCharacters } from "./animationUtils.js";
+import { createBubbleElement, createCharacterElement } from "./webUtils.js";
+
+export function getRandomColor(): string {
+  const colors = ['blue', 'green', 'red', 'orange'];
+  const random = Math.floor(Math.random() * colors.length);
+  return colors[random];
+}
+
+export function createBlob(blob: Blob): HTMLDivElement {
+  const color = blob.color;
+  const name = blob.name;
+  const characterContainerContainer = document.createElement('div');
+  characterContainerContainer.classList.add('character-container-container');
+
+  const characterName = document.createElement('div');
+  characterName.classList.add('character-name');
+  characterName.textContent = name;
+
+  const characterContainer = document.createElement('div');
+  characterContainer.classList.add('character-container');
+
+  let path = "../assets/img/"
+
+  const body = createCharacterElement('body', `${path}body.svg`);
+  const hat = createCharacterElement('hat', `${path}hat-${color}.svg`);
+
+  body.classList.add('idle');
+  hat.classList.add('idle');
+
+  setDelayToCharacters([body, hat], 1000);
+
+  characterContainer.appendChild(body);
+  characterContainer.appendChild(hat);
+  characterContainerContainer.appendChild(characterContainer);
+  characterContainerContainer.appendChild(characterName);
+
+  return characterContainerContainer;
+}
+
+export function flipBlob(containerContainer: HTMLElement): void {
+  containerContainer.children[0].classList.add('flip');
+}
+
+function divideBlobsInGroups(blobs: Blob[]): BlobGroup[] {
+  const groups: BlobGroup[] = [];
+
+  const groupsNames: BlobGroupSide[] = ["left", "right", "top", "bottom"];
+  const blobsPerGroup = 3;
+  const totalGroups = 4;
+
+  for (let i = 0; i < totalGroups; i++) {
+    const group: BlobGroup = {
+      side: groupsNames[i],
+      blobs: blobs.slice(i * blobsPerGroup, (i + 1) * blobsPerGroup),
+    };
+    groups.push(group);
+  }
+
+  return groups;
+}
+
+export function drawGroup(element: HTMLElement, group: BlobGroup): HTMLElement {
+  group.blobs.forEach((blob, index: number) => {
+    const flip = group.side === "right"
+    const character = createBlob(blob);
+    if (flip) {
+      flipBlob(character)
+    }
+    if (!group.side) {
+      console.error("Invalid side");
+      return "";
+    }
+    const blobText = getBlobText(blob);
+    let bubble;
+    if (group.side === "top" || group.side === "bottom") {
+      if (index >= (group.blobs.length - 1) / 2) {
+        bubble = createBubbleElement(blobText, group.side, "right");
+      } else {
+        bubble = createBubbleElement(blobText, group.side, "left");
+      }
+    } else {
+      bubble = createBubbleElement(blobText, group.side);
+    }
+    const gigaContainer = document.createElement('div');
+    gigaContainer.className = 'character-container-container-container'
+    gigaContainer.classList.add(group.side)
+    gigaContainer.appendChild(character)
+    gigaContainer.appendChild(bubble)
+    element.appendChild(gigaContainer);
+  })
+
+  return element;
+
+}
+
+
+
+
+export function setGroupSide(group: BlobGroup, side: BlobGroupSide): BlobGroup {
+  group.side = side;
+  group.blobs.forEach(blob => {
+    blob.side = side;
+  });
+  return group;
+}
+--------------------
+File: index.ts
+
+export * from './animationUtils.js';
+export * from './webUtils.js';
+export * from './generalUtils.js';
+--------------------
+File: webUtils.ts
+
+import { boardConfig } from "../constants/index.js";
+
+export function createCharacterElement(className: string, src: string): HTMLImageElement {
+  const element = document.createElement('img');
+  element.classList.add('character', className);
+  element.src = src;
+  element.alt = "Character";
+  return element;
+}
+
+export function createMainElement(): HTMLElement {
+  const main = document.createElement('main');
+  main.className = 'game-container';
+  return main;
+}
+
+export function createBubbleElement(body: string, originDirection: "right" | "left" | "bottom" | "top", extraDirection?: "left" | "right"): HTMLDivElement {
+  const container = document.createElement('div');
+  container.classList.add('chat-container');
+  const classSuffix = extraDirection
+    ? originDirection + ' ' + extraDirection
+    : originDirection;
+  container.innerHTML = `
+    <div class="chat-rectangle fill"></div>
+    <div class="chat-rectangle stroke"></div>
+    <svg class="bubble ${classSuffix}" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="stroke"
+        d="M12 -1C11.7201 -1 11.453 -0.882699 11.2636 -0.6766C11.0743 -0.470501 10.9799 -0.194469 11.0036 0.0844243C11.2459 2.94486 11.5316 7.6398 10.7658 12.1903C9.99574 16.7659 8.20388 20.9617 4.49411 23.1374C4.04718 23.3995 3.87447 23.9596 4.09617 24.4279C4.31788 24.8962 4.86056 25.1176 5.34657 24.938C8.55486 23.7526 12.9952 20.9569 16.8595 16.7859C20.7332 12.6047 24.0809 6.98386 24.9913 0.13171C25.0292 -0.153961 24.9421 -0.442118 24.7522 -0.658897C24.5624 -0.875676 24.2882 -1 24 -1H18H12Z" />
+      <path class="fill" d="M5 24C13.1846 19.2 12.4872 5.75 12 0H24C22.2462 13.2 11.0897 21.75 5 24Z" />
+    </svg>
+    ${body}
+    </line>`;
+
+  return container;
+}
+--------------------
+Folder: ts/text
+==================================================
+File: clueToText.ts
+
+import { clueColor, Blob, Clue, ColorClue, ClueTarget, BlobColor } from "../types/blobTypes";
+
+function getIsPlural(clue: Clue): boolean {
+  if (clue.clueType === "color" || clue.clueType === "side") {
+    return clue.target.type === "all" || clue.target.type === "range";
+  } else if (clue.clueType === "specific") {
+    return false;
+  } else if (clue.clueType === "all") {
+    return true;
+  }
+  return false
+}
+
+function getAmountText(amount: ClueTarget): string {
+  if (amount.type === "all") {
+    return "Todos";
+  }
+  if (amount.type === "some") {
+    return "Algum";
+  }
+  if (amount.type === "quantity") {
+    return "apenas " + amount.amount.toString();
+  }
+  if (amount.type === "range") {
+    return `entre ${amount.minimum} a ${amount.maximum}`;
+  }
+  return "";
+}
+
+function getColorText(color: BlobColor, isPlural: boolean): string {
+  if (color === "orange") {
+    return isPlural ? "Laranjas" : "Laranja";
+  }
+  if (color === "red") {
+    return isPlural ? "Vermelhos" : "Vermelho";
+  }
+  if (color === "blue") {
+    return isPlural ? "Azuis" : "Azul";
+  }
+  if (color === "green") {
+    return isPlural ? "Verdes" : "Verde";
+  }
+  return "";
+}
+
+function getBooleanText(booleanType: string, isPlural: boolean): string {
+  if (booleanType === "truth") {
+    return isPlural ? "Leais" : "Leal";
+  }
+  if (booleanType === "lie") {
+    return isPlural ? "Falsos" : "Falso";
+  }
+  return "";
+}
+
+function getSidePrefix(side: string | undefined, blob: Blob): string {
+  if (blob.side === undefined) {
+    return "";
+  }
+  if (blob.side === side) {
+    return "Aqui";
+  } else {
+    return "Lá";
+  }
+}
+
+function getSideText(side: string): string {
+  if (side === "top") {
+    return "acima";
+  }
+  if (side === "bottom") {
+    return "abaixo";
+  }
+  if (side === "left") {
+    return "na esquerda";
+  }
+  if (side === "right") {
+    return "na direita";
+  }
+  return "";
+}
+
+function getVerbText(isPlural: boolean): string {
+  return isPlural ? "são" : "é";
+}
+
+export function getBlobText(blob: Blob): string {
+  const color = blob.color;
+  const side = blob.side;
+  const booleanType = blob.clue.blobType;
+  const clue = blob.clue;
+  const isPlural = getIsPlural(clue);
+
+  if (clue.clueType === "color") {
+    const verbText = getVerbText(isPlural);
+    const amountText = getAmountText(clue.target);
+    const colorText = getColorText(color, isPlural);
+    const booleanText = getBooleanText(booleanType, isPlural);
+
+    const innerHtml = `
+        <line>${amountText}</line>
+        <line>${colorText}</line>
+        <line>${verbText} <${booleanType}>${booleanText}</${booleanType}>
+      `
+    return innerHtml;
+  }
+
+  if (clue.clueType === "side") {
+    const prefix = getSidePrefix(clue.side, blob);
+    const sideText = getSideText(clue.side);
+    const amountText = getAmountText(clue.target);
+    const verbText = getVerbText(isPlural);
+    const booleanText = getBooleanText(booleanType, isPlural);
+
+    const innerHtml =
+      `<line>${prefix} ${sideText}</line>
+        <line>${amountText}</line>
+        <line>${verbText} <${booleanType}>${booleanText}</${booleanType}>
+        `
+    return innerHtml;
+
+  }
+
+  if (clue.clueType === "specific") {
+    const verbText = getVerbText(isPlural);
+    const booleanText = getBooleanText(booleanType, isPlural);
+
+    const innerHtml =
+      `<line>${clue.blobName}</line>
+      <line>${verbText} <${booleanType}>${booleanText}</${booleanType}>
+      `
+
+    return innerHtml;
+  }
+
+  if (clue.clueType === "all") {
+    const prefix = getAllPrefix(isPlural);
+    const booleanText = getBooleanText(booleanType, isPlural);
+
+    const innerHtml =
+      `<line>${prefix}</line>
+      <line>apenas</line>
+      <line>${clue.amount} <${booleanType}>${booleanText}</${booleanType}></line>
+      `
+
+    return innerHtml;
+  }
+
+  return "";
+}
+
+export function getAllPrefix(isPlural: boolean): string {
+  return isPlural ? "Existem" : "Existe";
+}
+
+// ############################
+//          ColorClue
+// Todos            são      
+// Algum            é        
+// 1 a 3                       
+//        Laranjas             
+//        Vermelhos
+//        Azuis
+//        Verdes
+//                      Falsos
+//                      Leais
+
+// ############################
+//          SideClue
+// Lá   
+// Aqui 
+//      abaixo      
+//      acima       
+//      na esquerda 
+//      na direita 
+//                  Todos são
+//                  Algum é
+//                  1 a 3 
+//                            Falsos
+//                            Leais
+
+// ############################
+//         SpecificClue
+// Pedro é 
+//         Falso
+//         Leal
+
+// ############################
+//           AllClue
+// Existem 1 a 3 Falsos
+// ############################
+--------------------
+Folder: ts/levels
+==================================================
+File: index.ts
+
+export * from './level_0';
+--------------------
+File: level_0.ts
+
+import { Level, blob, blobGroup, clueAll, clueColor, clueSide, clueSpecific } from "../types/index.js";
+import { setGroupSide } from "../utils/generalUtils.js";
+
+export function level_0(): Level {
+  const minimumLiers = 1;
+  const maximumLiers = 3
+  const liersAmount = 3;
+
+  // Left Side
+  // Fer: All Oranges tell the truth
+  // Padre: Only 1 on the right tells the truth
+  // Jonas: Mario lies
+
+  const fer = blob("Fer", "orange",
+    clueColor({ type: "all" }, "orange", "truth"))
+
+  const padre = blob("Padre", "orange",
+    clueSide({ type: "quantity", amount: 1 }, "right", "truth"));
+
+  const jonas = blob("Jonas", "red",
+    clueSpecific("Mario", "lie"));
+
+  const leftSide = setGroupSide(blobGroup([fer, padre, jonas]), "left");
+
+  // Right Side
+  // Sipher: There are only 2 liers
+  // Mario: There are only 3 liers
+  // Bidu: At least 1 red Lies
+
+  const sipher = blob("Sipher", "red",
+    clueAll(2, "lie"));
+
+  const mario = blob("Mario", "green",
+    clueAll(3, "lie"));
+
+  const bidu = blob("Bidu", "blue",
+    clueColor({ type: "some" }, "red", "lie"));
+
+  const rightSide = setGroupSide(blobGroup([sipher, mario, bidu]), "right");
+
+  // Bottom Side
+  // Dama: All bottoms tell the truth
+  // Poopy: All oranges tell the truth
+
+  const dama = blob("Dama", "green",
+    clueSide({ type: "all" }, "bottom", "truth"));
+
+  const poopy = blob("Poopy", "orange",
+    clueColor({ type: "all" }, "orange", "truth"));
+
+  const bottomSide = setGroupSide(blobGroup([dama, poopy]), "bottom");
+  console.log(padre.side);
+
+  return {
+    name: "Level 0",
+    minimumLiers,
+    maximumLiers,
+    liersAmount: liersAmount,
+    groups: [leftSide, rightSide, bottomSide]
+  };
+
+}
+--------------------
