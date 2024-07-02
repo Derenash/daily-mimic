@@ -33,10 +33,6 @@ yarn-error.log*
 *.swp
 *.swo
 
-# Ignore compiled JavaScript files
-*.js
-*.js.map
-
 
 # Ignore temporary files
 *.tmp
