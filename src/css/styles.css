@@ -4,9 +4,9 @@
   --stroke-width: 2px;
   --stroke-color: red;
   --chat-border-radius: 50px;
-  --character-container-size: 100px;
-  --character-proportion: 1;
-  --character-container-actual-size: calc(var(--character-container-size) * var(--character-proportion));
+  --char-imgs-container-size: 100px;
+  --character-proportion: 1.4;
+  --char-imgs-container-actual-size: calc(var(--char-imgs-container-size) * var(--character-proportion));
   --game-width: 768px;
   --side-group-gap: 15px;
   --bottom-group-gap: 20px;
@@ -27,8 +27,6 @@ body {
   flex-direction: column;
   align-items: center;
   width: var(--game-width);
-  /* height: var(--game-height); */
-  /* gap: 20px; */
 }
 
 .group {
@@ -47,9 +45,9 @@ body {
   /* flex-grow: 1; */
   --group-gap: 20px;
   --side-size: calc(var(--game-width) / 2);
-  --side-chat-size: calc((var(--side-size) - var(--character-container-actual-size)) - var(--side-group-gap));
+  --side-chat-size: calc((var(--side-size) - var(--char-imgs-container-actual-size)) - var(--side-group-gap));
   --bottom-chat-size: calc(var(--side-chat-size) / 2);
-  --group-height: calc(var(--bottom-chat-size) + var(--character-container-actual-size) + var(--group-gap));
+  --group-height: calc(var(--bottom-chat-size) + var(--char-imgs-container-actual-size) + var(--group-gap));
   --group-width: 100%;
 }
 
@@ -92,59 +90,72 @@ p {
   position: absolute;
 }
 
-.character-container {
+.char-imgs-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   position: relative;
-  height: var(--character-container-actual-size);
+  height: var(--char-imgs-container-actual-size);
   transform: scale(var(--character-proportion), var(--character-proportion));
 }
 
-.character-container-container-container {
+.char-and-chat-container {
   display: flex;
   justify-content: flex-end;
+  --chat-fill-color: #D9D9D9;
+  --chat-stroke-color: #000000;
 }
 
-.character-container-container-container.right {
+/* 
+.char-and-chat-container.truth {
+  --chat-fill-color: #8ec4d1;
+  --chat-stroke-color: #008fb3;
+}
+
+.char-and-chat-container.lie {
+  --chat-fill-color: #f4a261;
+  --chat-stroke-color: #ff7b25;
+} */
+
+.char-and-chat-container.right {
   flex-direction: row-reverse;
   align-items: center;
   width: 100%;
   gap: var(--side-group-gap);
 }
 
-.character-container-container-container.left {
+.char-and-chat-container.left {
   flex-direction: row;
   align-items: center;
   width: 100%;
   gap: var(--side-group-gap);
 }
 
-.character-container-container-container.bottom {
+.char-and-chat-container.bottom {
   flex-direction: column-reverse;
   align-items: center;
   height: 100%;
   gap: var(--bottom-group-gap);
 }
 
-.character-container-container-container.top {
+.char-and-chat-container.top {
   flex-direction: column;
   align-items: center;
   height: 100%;
   gap: var(--bottom-group-gap);
 }
 
-.character-container-container {
+.char-and-name-container {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: var(--character-container-actual-size);
-  height: var(--character-container-actual-size);
+  width: var(--char-imgs-container-actual-size);
+  height: var(--char-imgs-container-actual-size);
 }
 
-.character-container-container .flip {
+.char-and-name-container .flip {
   transform: scale(var(--character-proportion), var(--character-proportion)) matrix(-1, 0, 0, 1, 0, 0);
 }
 

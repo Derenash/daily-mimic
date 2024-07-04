@@ -8,14 +8,14 @@
 
 .group.bottom .chat-container,
 .group.top .chat-container {
-  --remaining-space: calc(var(--group-height) - var(--group-gap) - var(--character-container-actual-size));
+  --remaining-space: calc(var(--group-height) - var(--group-gap) - var(--char-imgs-container-actual-size));
   width: calc(var(--remaining-space) * 2);
   height: var(--remaining-space);
 }
 
 .group.left .chat-container,
 .group.right .chat-container {
-  --remaining-space: calc(var(--group-width) - var(--group-gap) - var(--character-container-actual-size));
+  --remaining-space: calc(var(--group-width) - var(--group-gap) - var(--char-imgs-container-actual-size));
   width: var(--remaining-space);
   height: calc(var(--remaining-space) / 2);
 }
@@ -31,7 +31,7 @@
 }
 
 .chat-rectangle.fill {
-  background: #D9D9D9;
+  background: var(--chat-fill-color);
   position: absolute;
   z-index: 12;
 }
@@ -39,7 +39,7 @@
 .chat-rectangle.stroke {
   outline-width: calc(var(--stroke-width));
   outline-style: solid;
-  outline-color: var(--stroke-color);
+  outline-color: var(--chat-stroke-color);
   border-radius: var(--chat-border-radius);
   z-index: 0;
 }
@@ -57,17 +57,18 @@
 }
 
 
-.bubble.bottom.right {
+.bubble.bottom {
   bottom: 0;
   --bubble-transform: translate(-150%, calc(100% - 4px));
   right: 0;
 }
 
+/* 
 .bubble.bottom.left {
   bottom: 0;
   --bubble-transform: translate(150%, calc(100% - 4px)) scaleX(-1);
   left: 0;
-}
+} */
 
 .bubble.left {
   left: -8px;
@@ -83,13 +84,13 @@
 }
 
 .bubble .stroke {
-  stroke: var(--stroke-color);
+  stroke: var(--chat-stroke-color);
   stroke-width: calc(var(--stroke-width));
   stroke-linejoin: round;
 }
 
 .bubble .fill {
-  fill: #D9D9D9;
+  fill: var(--chat-fill-color);
 }
 
 .bubble path {
@@ -105,14 +106,3 @@
   line-height: calc(36px - (var(--character-proportion) * 8px));
   color: black;
 }
-
-/* 
-truth {
-  color: #197FDE;
-  font-weight: 800;
-}
-
-lie {
-  color: #E03600;
-  font-weight: 800;
-} */

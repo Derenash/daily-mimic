@@ -1,9 +1,12 @@
 import { level_0 } from './levels/level_0.js';
 import { applyAllInitialStyles } from './utils/applyStyles.js';
-import { createMainElement } from './web/creteMainElements.js';
-import { addToGroup } from './web/addToGroup.js';
+import { createMainElement } from './web/createMainElement.js';
+import { createCharAndChatContainer } from './web/createCharAndChatContainer.js';
+import { Blob } from './types/blobTypes.js';
+import { setupMessageHighlighting } from './utils/messageHighlighting.js';
 
 const level = level_0();
+const blobsMap = new Map<string, Blob>(level.blobs.map(blob => [blob.name, blob]));
 
 document.addEventListener('DOMContentLoaded', () => {
   // apply all styles
@@ -22,8 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const topRow = document.createElement('div');
   topRow.className = 'group';
   topRow.classList.add('top');
+
   const middleRow = document.createElement('div');
   middleRow.className = 'middle-row';
+
   const bottomRow = document.createElement('div');
   bottomRow.className = 'group';
   bottomRow.classList.add('bottom');
@@ -31,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const leftColumn = document.createElement('div');
   leftColumn.className = 'group';
   leftColumn.classList.add('left');
+
   const rightColumn = document.createElement('div');
   rightColumn.className = 'group';
   rightColumn.classList.add('right');
@@ -60,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Invalid side');
         return;
     }
-    addToGroup(target, blob);
+    const charAndChatContainer = createCharAndChatContainer(blob);
+    if (charAndChatContainer) target.appendChild(charAndChatContainer);
   })
-
-  // createMultipleCharacters(main, 9, blobNamesPTBR);
+  setupMessageHighlighting(blobsMap);
 });

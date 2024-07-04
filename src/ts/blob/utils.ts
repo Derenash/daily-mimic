@@ -1,31 +1,29 @@
 import { AllClue, Blob, BlobColor, BlobGroup, BlobType, Clue, ClueTarget, ClueTargetAll, ClueTargetQuantity, ClueTargetRange, ClueTargetSome, ColorClue, GroupSide, SideClue, SpecificClue } from "../types";
 
-function getFilterCondition(blob: Blob): { blobType: BlobType, filter: (x: Blob) => boolean } {
-  const clue = blob.clue;
-  const blobType = blob.clue.blobType
-  const filter = (x: Blob) => {
-    if (clue.clueType === "color") {
-      return x.color === clue.color;
-    }
+export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map<string, Blob>): boolean {
+  const target = blobsMap.get(targetName);
+  if (!target) return false;
 
-    if (clue.clueType === "side") {
-      return x.side === clue.side;
-    }
-
-    if (clue.clueType === "specific") {
-      return x.name === clue.blobName;
-    }
-
-    if (clue.clueType === "all") {
-      return true;
-    }
-
-    return false;
+  let result = false;
+  if (clue.clueType === "color") {
+    result = target.color === clue.color;
   }
-  return { blobType, filter };
+
+  if (clue.clueType === "side") {
+    result = target.side === clue.side;
+  }
+
+  if (clue.clueType === "specific") {
+    result = target.name === clue.blobName;
+  }
+
+  if (clue.clueType === "all") {
+    result = true;
+  }
+
+  return result;
 }
 
-// type generators
 export function blobGroup(blobs: Blob[], side?: GroupSide): BlobGroup {
   return {
     side: side,

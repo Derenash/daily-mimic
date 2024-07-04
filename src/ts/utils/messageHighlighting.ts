@@ -1,37 +1,50 @@
-export function setupMessageHighlighting(): void {
-  const chatRectangle = document.querySelector('.chat-rectangle');
-  if (!chatRectangle) return;
+import { BlobNameIsTargeted } from "../blob/utils.js";
+import { blobType } from "../constants/index.js";
+import { Blob, BlobType } from "../types/index.js";
 
-  const messages = chatRectangle.querySelectorAll('.message') as NodeListOf<HTMLElement>;
+export function setupMessageHighlighting(blobsMap: Map<string, Blob>): void {
+  const charAndChatContainers = document.querySelectorAll('.char-and-chat-container') as NodeListOf<HTMLDivElement>;
 
-  messages.forEach((message: HTMLElement) => {
-    message.addEventListener('mouseover', () => highlightMessage(message));
-    message.addEventListener('mouseout', () => removeHighlight(message));
+
+  charAndChatContainers.forEach((container: HTMLDivElement) => {
+    const name = container.getAttribute('data-name');
+    if (!name) return;
+    container.addEventListener('mouseover', () => highlightMessages(name, blobsMap));
+    container.addEventListener('mouseout', () => removeHighlights());
   });
 }
 
-function highlightMessage(message: HTMLElement): void {
-  const text = message.textContent?.toLowerCase() || '';
-  const colorMatch = text.match(/all (\w+)s are/);
+function highlightMessages(blobName: string, blobsMap: Map<string, Blob>): void {
+  const charAndChatContainers = document.querySelectorAll('.char-and-chat-container') as NodeListOf<HTMLDivElement>;
+  const blob = blobsMap.get(blobName);
+  if (!blob) return;
 
-  if (colorMatch) {
-    const color = colorMatch[1];
-    const blobsToHighlight = document.querySelectorAll(`[data-blob-color="${color}"]`) as NodeListOf<HTMLElement>;
+  charAndChatContainers.forEach((charAndChatContainer: HTMLDivElement) => {
+    const blobName = charAndChatContainer.getAttribute('data-name');
+    if (!blobName) return;
 
-    blobsToHighlight.forEach((blob: HTMLElement) => {
-      blob.classList.add('blob-highlight');
-    });
+    const target = blobsMap.get(blobName);
+    if (!target) return;
 
-    const isTrue = text.includes('truth') || text.includes('true');
-    message.classList.add(isTrue ? 'message-highlight-true' : 'message-highlight-false');
-  }
+    const isTargeted = BlobNameIsTargeted(blob.clue, target.name, blobsMap);
+    if (isTargeted) {
+      highlightMessage(charAndChatContainer, blob.clue.blobType);
+    }
+  });
 }
 
-function removeHighlight(message: HTMLElement): void {
-  const blobsToUnhighlight = document.querySelectorAll('.blob-highlight') as NodeListOf<HTMLElement>;
-  blobsToUnhighlight.forEach((blob: HTMLElement) => {
-    blob.classList.remove('blob-highlight');
-  });
+function highlightMessage(charAndChatContainer: HTMLDivElement, blobType: BlobType): void {
+  charAndChatContainer.classList.add(blobType);
+}
 
-  message.classList.remove('message-highlight-true', 'message-highlight-false');
+function removeHighlights(): void {
+  const charAndChatContainers = document.querySelectorAll('.char-and-chat-container') as NodeListOf<HTMLDivElement>;
+  charAndChatContainers.forEach((charAndChatContainer: HTMLDivElement) => {
+    removeHighlight(charAndChatContainer);
+  });
+}
+
+function removeHighlight(charAndChatContainer: HTMLDivElement): void {
+  charAndChatContainer.classList.remove(blobType.TRUTH);
+  charAndChatContainer.classList.remove(blobType.LIE);
 }

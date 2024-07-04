@@ -5,15 +5,14 @@ export function createBlobElement(blob: Blob): HTMLDivElement {
   const color = blob.color;
   const name = blob.name;
   const characterContainerContainer = document.createElement('div');
-  characterContainerContainer.classList.add('character-container-container');
-  characterContainerContainer.setAttribute('data-blob-name', name);
+  characterContainerContainer.classList.add('char-and-name-container');
 
   const characterName = document.createElement('div');
   characterName.classList.add('character-name');
   characterName.textContent = name;
 
   const characterContainer = document.createElement('div');
-  characterContainer.classList.add('character-container');
+  characterContainer.classList.add('char-imgs-container');
 
   let path = "../assets/img/"
 

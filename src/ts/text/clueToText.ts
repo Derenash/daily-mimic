@@ -11,7 +11,7 @@ export function getBlobText(blob: Blob): string {
   if (clue.clueType === "color") {
     const verbText = getVerbText(isPlural);
     const amountText = getAmountText(clue.target);
-    const colorText = getColorText(color, isPlural);
+    const colorText = getColorText(clue.color, isPlural);
     const booleanText = getBooleanText(booleanType, isPlural);
 
     const innerHtml = `

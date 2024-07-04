@@ -25,6 +25,17 @@ export const blobTypeStyles: Record<BlobType, BlobTypeStyle> = {
   },
 };
 
+export const blobTypeChatStyles: Record<BlobType, Record<string, string>> = {
+  [blobType.TRUTH]: {
+    "--chat-fill-color": "#8ec4d1",
+    "--chat-stroke-color": "#008fb3",
+  },
+  [blobType.LIE]: {
+    "--chat-fill-color": "#f4a261",
+    "--chat-stroke-color": "#ff7b25",
+  },
+};
+
 export const groupSide = {
   LEFT: "left",
   RIGHT: "right",
