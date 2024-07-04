@@ -1,19 +1,4 @@
-import { GroupSide } from "../types/blobTypes.js";
-
-export function createCharacterElement(className: string, src: string): HTMLImageElement {
-  const element = document.createElement('img');
-  element.classList.add('character', className);
-  element.src = src;
-  element.alt = "Character";
-  return element;
-}
-
-export function createMainElement(): HTMLElement {
-  const main = document.createElement('main');
-  main.className = 'game-container';
-  return main;
-}
-
+import { GroupSide } from "../types/index.js";
 
 export function createBubbleElement(body: string, originDirection: GroupSide, extraDirection?: "left" | "right"): HTMLDivElement {
   const container = document.createElement('div');

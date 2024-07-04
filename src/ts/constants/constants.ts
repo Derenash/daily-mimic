@@ -1,4 +1,4 @@
-import { BlobType, BlobTypeStyle, BlobConfig, BoardConfig } from "../types/index.js";
+import { BlobType, BlobTypeStyle } from "../types/index.js";
 
 export const blobColor = {
   RED: "red",
@@ -87,14 +87,3 @@ export const blobNamesPTBR = [
   "Keyan", "Corgan", "Sipher", "Luiza", "Pedro", "Lucas", "Kirari",
   "Leozin", "Thunder", "Vulpis", "Crono", "Bonny", "Theo"
 ];
-
-export const blobConfig: BlobConfig = {
-  width: 110,
-  height: 74,
-  gap: 30
-};
-
-export const boardConfig: BoardConfig = {
-  width: 768,
-  height: 800
-};
