@@ -5,7 +5,7 @@
   --stroke-color: red;
   --chat-border-radius: 50px;
   --char-imgs-container-size: 100px;
-  --character-proportion: 1.4;
+  --character-proportion: 1.5;
   --char-imgs-container-actual-size: calc(var(--char-imgs-container-size) * var(--character-proportion));
   --game-width: 768px;
   --side-group-gap: 15px;
@@ -103,20 +103,7 @@ p {
 .char-and-chat-container {
   display: flex;
   justify-content: flex-end;
-  --chat-fill-color: #D9D9D9;
-  --chat-stroke-color: #000000;
 }
-
-/* 
-.char-and-chat-container.truth {
-  --chat-fill-color: #8ec4d1;
-  --chat-stroke-color: #008fb3;
-}
-
-.char-and-chat-container.lie {
-  --chat-fill-color: #f4a261;
-  --chat-stroke-color: #ff7b25;
-} */
 
 .char-and-chat-container.right {
   flex-direction: row-reverse;

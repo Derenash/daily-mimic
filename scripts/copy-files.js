@@ -3,7 +3,7 @@ const glob = require('glob');
 
 // Array of file patterns to copy
 const filesToCopy = [
-  'src/html/*',
+  'src/index.html',
   'src/css/*',
   'src/assets/*'
 ];

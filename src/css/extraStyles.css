@@ -1,0 +1,52 @@
+/* Blob Type Styles */
+truth {
+  color: #197FDE;
+  font-weight: 800;
+}
+
+lie {
+  color: #E03600;
+  font-weight: 800;
+}
+
+.char-and-chat-container {
+  --chat-fill-color: #D9D9D9;
+  --chat-stroke-color: #000000;
+  --blob-head-color: #FFFFFF;
+  --blob-eye-color: #FFFFFF;
+}
+
+/* Blob Type Chat Styles */
+.char-and-chat-container.hovered {
+  --chat-fill-color: #FFFFFF;
+  --chat-stroke-color: #000000;
+  --blob-head-color: #FFFFFF;
+}
+
+.char-and-chat-container.truth {
+  --chat-fill-color: #c2fac7;
+  --chat-stroke-color: #1ed862;
+  --blob-head-color: #c0ffd1;
+  --blob-eye-color: #71e5f0;
+}
+
+.char-and-chat-container.maybe-truth {
+  --chat-fill-color: #e2f8e4;
+  --chat-stroke-color: #67d790;
+  --blob-head-color: #daf9e2;
+  --blob-eye-color: #8be9f0;
+}
+
+.char-and-chat-container.lie {
+  --chat-fill-color: #eea3a3;
+  --chat-stroke-color: #c91f1f;
+  --blob-head-color: #ffa5a5;
+  --blob-eye-color: #fc4949;
+}
+
+.char-and-chat-container.maybe-lie {
+  --chat-fill-color: #efd4d4;
+  --chat-stroke-color: #bf5656;
+  --blob-head-color: #ffe9e9;
+  --blob-eye-color: black;
+}

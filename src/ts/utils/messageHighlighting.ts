@@ -9,8 +9,14 @@ export function setupMessageHighlighting(blobsMap: Map<string, Blob>): void {
   charAndChatContainers.forEach((container: HTMLDivElement) => {
     const name = container.getAttribute('data-name');
     if (!name) return;
-    container.addEventListener('mouseover', () => highlightMessages(name, blobsMap));
-    container.addEventListener('mouseout', () => removeHighlights());
+    container.addEventListener('mouseover', () => {
+      container.classList.add('hovered');
+      highlightMessages(name, blobsMap)
+    });
+    container.addEventListener('mouseout', () => {
+      container.classList.remove('hovered');
+      removeHighlights()
+    });
   });
 }
 
@@ -27,14 +33,15 @@ function highlightMessages(blobName: string, blobsMap: Map<string, Blob>): void 
     if (!target) return;
 
     const isTargeted = BlobNameIsTargeted(blob.clue, target.name, blobsMap);
-    if (isTargeted) {
-      highlightMessage(charAndChatContainer, blob.clue.blobType);
+    if (isTargeted === "true" || isTargeted === "maybe") {
+      highlightMessage(charAndChatContainer, isTargeted, blob.clue.blobType);
     }
   });
 }
 
-function highlightMessage(charAndChatContainer: HTMLDivElement, blobType: BlobType): void {
-  charAndChatContainer.classList.add(blobType);
+function highlightMessage(charAndChatContainer: HTMLDivElement, isTargeted: string, blobType: BlobType): void {
+  const className = isTargeted === "true" ? blobType : `maybe-${blobType}`;
+  charAndChatContainer.classList.add(className);
 }
 
 function removeHighlights(): void {
@@ -46,5 +53,7 @@ function removeHighlights(): void {
 
 function removeHighlight(charAndChatContainer: HTMLDivElement): void {
   charAndChatContainer.classList.remove(blobType.TRUTH);
+  charAndChatContainer.classList.remove(`maybe-${blobType.TRUTH}`);
   charAndChatContainer.classList.remove(blobType.LIE);
+  charAndChatContainer.classList.remove(`maybe-${blobType.LIE}`);
 }

@@ -1,27 +1,42 @@
 import { AllClue, Blob, BlobColor, BlobGroup, BlobType, Clue, ClueTarget, ClueTargetAll, ClueTargetQuantity, ClueTargetRange, ClueTargetSome, ColorClue, GroupSide, SideClue, SpecificClue } from "../types";
 
-export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map<string, Blob>): boolean {
+export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map<string, Blob>): string {
   const target = blobsMap.get(targetName);
-  if (!target) return false;
+  if (!target) return "false";
 
-  let result = false;
   if (clue.clueType === "color") {
-    result = target.color === clue.color;
+    if (target.color === clue.color) {
+      if (clue.target.type === "all") {
+        return "true";
+      }
+      return "maybe";
+    }
+    return "false";
   }
 
   if (clue.clueType === "side") {
-    result = target.side === clue.side;
+    if (target.side === clue.side) {
+      if (clue.target.type === "all") {
+        return "true";
+      }
+      return "maybe";
+    }
+    return "false";
   }
 
   if (clue.clueType === "specific") {
-    result = target.name === clue.blobName;
+    if (target.name === clue.blobName) {
+      return "true";
+    }
+    return "false";
+
   }
 
   if (clue.clueType === "all") {
-    result = true;
+    return "false";
   }
 
-  return result;
+  return "false";
 }
 
 export function blobGroup(blobs: Blob[], side?: GroupSide): BlobGroup {

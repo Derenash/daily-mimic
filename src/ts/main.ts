@@ -1,5 +1,4 @@
 import { level_0 } from './levels/level_0.js';
-import { applyAllInitialStyles } from './utils/applyStyles.js';
 import { createMainElement } from './web/createMainElement.js';
 import { createCharAndChatContainer } from './web/createCharAndChatContainer.js';
 import { Blob } from './types/blobTypes.js';
@@ -10,7 +9,6 @@ const blobsMap = new Map<string, Blob>(level.blobs.map(blob => [blob.name, blob]
 
 document.addEventListener('DOMContentLoaded', () => {
   // apply all styles
-  applyAllInitialStyles();
   const main: HTMLElement = createMainElement();
   main.className = 'game-container';
   document.body.appendChild(main);
