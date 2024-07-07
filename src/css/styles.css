@@ -1,15 +1,19 @@
 :root {
-  --top-top: -80px;
-  --top-mid: 0px;
+  --main-font: 'Baloo 2', cursive;
+  --main-font-weight: 600;
+  --min-width: min(calc(100vw - var(--min-margin)), 768px);
+  --min-margin: 25px;
   --stroke-width: 2px;
-  --stroke-color: red;
   --chat-border-radius: 50px;
-  --char-imgs-container-size: 100px;
-  --character-proportion: 1.5;
-  --char-imgs-container-actual-size: calc(var(--char-imgs-container-size) * var(--character-proportion));
-  --game-width: 768px;
-  --side-group-gap: 15px;
-  --bottom-group-gap: 20px;
+  --character-proportion: 1;
+  --chat-container-aspect-ratio: 1.8;
+  --bubble-arrow-size: calc(0.1 * var(--min-width));
+  --side-group-gap: calc(0.03 * var(--min-width));
+  --side-group-width: calc(0.5 * var(--min-width));
+  --side-group-padding: calc(0.01 * var(--min-width));
+  --font-size: calc(0.035 * var(--min-width));
+  --char-and-name-container-size: calc(0.33 * var(--side-group-width));
+  --chat-container-width: calc(var(--side-group-width) - var(--side-group-gap) - var(--char-and-name-container-size))
 }
 
 body {
@@ -26,39 +30,26 @@ body {
   justify-content: flex-start;
   flex-direction: column;
   align-items: center;
-  width: var(--game-width);
+  width: min(100vw, 768px);
+  gap: var(--side-group-gap);
 }
 
 .group {
   display: flex;
-  height: var(--group-height);
-  width: var(--group-width);
-  gap: var(--group-gap)
+  justify-content: space-evenly;
+  gap: var(--side-group-gap);
 }
 
 .group.top,
 .group.bottom {
-  justify-content: space-evenly;
-  align-items: center;
   flex-direction: row;
-  /* max-height: 250px; */
-  /* flex-grow: 1; */
-  --group-gap: 20px;
-  --side-size: calc(var(--game-width) / 2);
-  --side-chat-size: calc((var(--side-size) - var(--char-imgs-container-actual-size)) - var(--side-group-gap));
-  --bottom-chat-size: calc(var(--side-chat-size) / 2);
-  --group-height: calc(var(--bottom-chat-size) + var(--char-imgs-container-actual-size) + var(--group-gap));
-  --group-width: 100%;
+  padding: var(--side-group-padding) 0;
 }
 
 .group.left,
 .group.right {
-  justify-content: space-evenly;
   flex-direction: column;
-  --group-gap: var(--side-group-gap);
-  --group-height: 100%;
-  --group-width: calc(var(--game-width) / 2);
-  padding: 0 10px;
+  padding: 0 var(--side-group-padding);
 }
 
 .group.left {
@@ -75,16 +66,8 @@ body {
   align-items: center;
   flex-direction: row;
   width: 100%;
-  min-height: 500px;
 }
 
-h1 {
-  color: #333;
-}
-
-p {
-  color: #666;
-}
 
 .character {
   position: absolute;
@@ -96,41 +79,35 @@ p {
   align-items: center;
   flex-direction: column;
   position: relative;
-  height: var(--char-imgs-container-actual-size);
-  transform: scale(var(--character-proportion), var(--character-proportion));
+  width: 100%;
+  height: 75%;
 }
 
 .char-and-chat-container {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: var(--side-group-gap);
+}
+
+.char-and-chat-container:hover {
+  --stroke-width: (var(--stroke-width) * 2);
 }
 
 .char-and-chat-container.right {
   flex-direction: row-reverse;
-  align-items: center;
-  width: 100%;
-  gap: var(--side-group-gap);
 }
 
 .char-and-chat-container.left {
   flex-direction: row;
-  align-items: center;
-  width: 100%;
-  gap: var(--side-group-gap);
 }
 
 .char-and-chat-container.bottom {
   flex-direction: column-reverse;
-  align-items: center;
-  height: 100%;
-  gap: var(--bottom-group-gap);
 }
 
 .char-and-chat-container.top {
   flex-direction: column;
-  align-items: center;
-  height: 100%;
-  gap: var(--bottom-group-gap);
 }
 
 .char-and-name-container {
@@ -138,8 +115,8 @@ p {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: var(--char-imgs-container-actual-size);
-  height: var(--char-imgs-container-actual-size);
+  width: var(--char-and-name-container-size);
+  height: var(--char-and-name-container-size);
 }
 
 .char-and-name-container .flip {
@@ -147,15 +124,186 @@ p {
 }
 
 .character-name {
-  font-family: 'Baloo 2', cursive;
-  font-size: calc(18px * var(--character-proportion));
-  line-height: calc(18px * var(--character-proportion));
+  font-family: var(--main-font), cursive;
+  font-size: var(--font-size);
+  line-height: var(--font-size);
   color: #FFFFFF;
-  font-weight: 500;
+  font-weight: var(--main-font-weight);
   text-shadow: 0.000em 0.075em black, 0.029em 0.069em black, 0.053em 0.053em black, 0.069em 0.029em black, 0.075em 0.000em black, 0.069em -0.029em black, 0.053em -0.053em black, 0.029em -0.069em black, 0.000em -0.075em black, -0.029em -0.069em black, -0.053em -0.053em black, -0.069em -0.029em black, -0.075em -0.000em black, -0.069em 0.029em black, -0.053em 0.053em black, -0.029em 0.069em black;
-  transform: translateY(-15%);
 }
 
 .box {
   position: absolute;
+}
+
+.chat-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: var(--chat-container-width);
+  aspect-ratio: var(--chat-container-aspect-ratio);
+  position: relative;
+}
+
+.chat-rectangle {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--chat-border-radius);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.chat-rectangle.fill {
+  background: var(--chat-fill-color);
+  position: absolute;
+  z-index: 12;
+}
+
+.chat-rectangle.stroke {
+  outline-width: var(--stroke-width);
+  outline-style: solid;
+  outline-color: var(--chat-stroke-color);
+  border-radius: var(--chat-border-radius);
+  z-index: 0;
+}
+
+.bubble {
+  position: absolute;
+  width: var(--bubble-arrow-size);
+  height: var(--bubble-arrow-size);
+  overflow: visible;
+  z-index: 1;
+}
+
+.bubble.top {
+  top: 0;
+  --bubble-transform: translate(80%, 0) scaleX(-1) rotate(180deg);
+}
+
+.bubble.left {
+  left: 0;
+  bottom: 0;
+  transform: translate(-15%, 20%);
+  --bubble-transform: rotate(45deg);
+}
+
+.bubble.right {
+  right: 0;
+  bottom: 0;
+  transform: translate(115%, 20%);
+  --bubble-transform: rotate(-45deg) scaleX(-1);
+}
+
+.bubble.bottom {
+  bottom: 0;
+  right: 0;
+  --bubble-transform: translate(-15%, 95%);
+}
+
+.bubble .stroke {
+  stroke: var(--chat-stroke-color);
+  stroke-width: var(--stroke-width);
+  stroke-linejoin: round;
+}
+
+.bubble .fill {
+  fill: var(--chat-fill-color);
+}
+
+.bubble path {
+  transform: var(--bubble-transform);
+}
+
+.chat-container line {
+  z-index: 25;
+  font-family: var(--main-font);
+  font-style: normal;
+  font-weight: var(--main-font-weight);
+  font-size: var(--font-size);
+  line-height: var(--font-size);
+  color: black;
+}
+
+:root {
+  /* Base colors */
+  --white: #FFFFFF;
+  --black: #000000;
+  --light-gray: #D9D9D9;
+
+  /* Truth colors */
+  --blue: #197FDE;
+  --light-green: #c2fac7;
+  --medium-green: #1ed862;
+  --pale-green: #e2f8e4;
+  --soft-green: #67d790;
+  --mint-green: #c0ffd1;
+  --pale-mint: #daf9e2;
+  --light-cyan: #71e5f0;
+  --pale-cyan: #8be9f0;
+
+  /* Lie colors */
+  --red: #E03600;
+  --light-red: #eea3a3;
+  --dark-red: #c91f1f;
+  --pale-red: #efd4d4;
+  --medium-red: #bf5656;
+  --salmon: #ffa5a5;
+  --light-salmon: #ffe9e9;
+  --bright-red: #fc4949;
+  --soft-red: #ffb9b9;
+}
+
+/* Blob Type Styles */
+truth {
+  color: var(--blue);
+  font-weight: 800;
+}
+
+lie {
+  color: var(--red);
+  font-weight: 800;
+}
+
+.char-and-chat-container {
+  --chat-fill-color: var(--light-gray);
+  --chat-stroke-color: var(--black);
+  --blob-head-color: var(--white);
+  --blob-eye-color: var(--white);
+}
+
+/* Blob Type Chat Styles */
+.char-and-chat-container.hovered {
+  --chat-fill-color: var(--white);
+  --chat-stroke-color: var(--black);
+  --blob-head-color: var(--white);
+}
+
+.char-and-chat-container.truth {
+  --chat-fill-color: var(--light-green);
+  --chat-stroke-color: var(--medium-green);
+  --blob-head-color: var(--mint-green);
+  --blob-eye-color: var(--light-cyan);
+}
+
+.char-and-chat-container.maybe-truth {
+  --chat-fill-color: var(--pale-green);
+  --chat-stroke-color: var(--soft-green);
+  --blob-head-color: var(--pale-mint);
+  --blob-eye-color: var(--pale-cyan);
+}
+
+.char-and-chat-container.lie {
+  --chat-fill-color: var(--light-red);
+  --chat-stroke-color: var(--dark-red);
+  --blob-head-color: var(--salmon);
+  --blob-eye-color: var(--bright-red);
+}
+
+.char-and-chat-container.maybe-lie {
+  --chat-fill-color: var(--pale-red);
+  --chat-stroke-color: var(--medium-red);
+  --blob-head-color: var(--light-salmon);
+  --blob-eye-color: var(--soft-red);
 }

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   middleRow.appendChild(leftColumn);
   middleRow.appendChild(rightColumn);
-  // main.appendChild(topRow);
+  main.appendChild(topRow);
   main.appendChild(middleRow);
   main.appendChild(bottomRow);
 

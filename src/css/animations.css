@@ -46,68 +46,6 @@
   }
 }
 
-@keyframes jump-body-long {
-
-  0%,
-  100% {
-    transform: scale(1);
-    top: var(--top-mid);
-  }
-
-  10%,
-  90% {
-    transform: scale(1.2, 0.8);
-    top: var(--top-mid);
-  }
-
-  30%,
-  70% {
-    transform: scale(0.8, 1.2);
-  }
-
-  50% {
-    transform: scale(0.9, 1.1);
-    top: var(--top-top);
-  }
-}
-
-@keyframes jump-hat-long {
-
-  0%,
-  100% {
-    transform: scale(1);
-    top: var(--top-mid);
-  }
-
-  10%,
-  90% {
-    transform: rotate(8deg) scale(1.14, 0.95) translate(3%, 0);
-    top: var(--top-mid);
-  }
-
-  30%,
-  70% {
-    transform: scale(0.83, 1.12) translate(0, 0);
-  }
-
-  50% {
-    transform: scale(0.9, 1.1) translate(0, 0);
-    top: var(--top-top);
-  }
-}
-
-.character.body.jump {
-  animation-name: jump-body-long;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-}
-
-.character.hat.jump {
-  animation-name: jump-hat-long;
-  animation-duration: 3s;
-  animation-iteration-count: infinite;
-}
-
 .character.body.idle {
   animation-name: bounce-body-short;
   animation-duration: 1s;
