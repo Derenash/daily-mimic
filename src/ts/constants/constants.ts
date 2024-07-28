@@ -8,8 +8,8 @@ export const blobColor = {
 } as const;
 
 export const blobType = {
-  TRUTH: "truth",
-  LIE: "lie"
+  TRUTH: "Legit",
+  LIE: "Fake"
 } as const;
 
 export const groupSide = {

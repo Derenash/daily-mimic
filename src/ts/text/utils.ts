@@ -1,4 +1,4 @@
-import { blobColor } from "../constants/index.js";
+import { blobColor, blobType } from "../constants/index.js";
 import { Blob, BlobColor, Clue, ClueTarget } from "../types/index.js";
 
 export function getIsPlural(clue: Clue): boolean {
@@ -53,10 +53,10 @@ export function getColorText(color: BlobColor, isPlural: boolean): string {
 }
 
 export function getBooleanText(booleanType: string, isPlural: boolean): string {
-  if (booleanType === "truth") {
+  if (booleanType === blobType.TRUTH) {
     return isPlural ? "Leais" : "Leal";
   }
-  if (booleanType === "lie") {
+  if (booleanType === blobType.LIE) {
     return isPlural ? "Falsos" : "Falso";
   }
   return "";

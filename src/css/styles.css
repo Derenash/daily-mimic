@@ -256,12 +256,12 @@ body {
 }
 
 /* Blob Type Styles */
-truth {
+Legit {
   color: var(--blue);
   font-weight: 800;
 }
 
-lie {
+Fake {
   color: var(--red);
   font-weight: 800;
 }
@@ -280,28 +280,28 @@ lie {
   --blob-head-color: var(--white);
 }
 
-.char-and-chat-container.truth {
+.char-and-chat-container.Legit {
   --chat-fill-color: var(--light-green);
   --chat-stroke-color: var(--medium-green);
   --blob-head-color: var(--mint-green);
   --blob-eye-color: var(--light-cyan);
 }
 
-.char-and-chat-container.maybe-truth {
+.char-and-chat-container.maybe-Legit {
   --chat-fill-color: var(--pale-green);
   --chat-stroke-color: var(--soft-green);
   --blob-head-color: var(--pale-mint);
   --blob-eye-color: var(--pale-cyan);
 }
 
-.char-and-chat-container.lie {
+.char-and-chat-container.Fake {
   --chat-fill-color: var(--light-red);
   --chat-stroke-color: var(--dark-red);
   --blob-head-color: var(--salmon);
   --blob-eye-color: var(--bright-red);
 }
 
-.char-and-chat-container.maybe-lie {
+.char-and-chat-container.maybe-Fake {
   --chat-fill-color: var(--pale-red);
   --chat-stroke-color: var(--medium-red);
   --blob-head-color: var(--light-salmon);

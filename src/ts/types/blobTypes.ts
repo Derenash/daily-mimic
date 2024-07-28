@@ -1,4 +1,5 @@
 import { blobColor, blobType, groupSide } from "../constants/index.js";
+import { blobMapFromList, moveElementToStart } from "../utils/generalUtils.js";
 
 export type GroupSide = typeof groupSide[keyof typeof groupSide];
 export type BlobType = typeof blobType[keyof typeof blobType];
@@ -81,108 +82,161 @@ export interface ClueTargetRange {
 type Hypotheses = Hypothesis[]
 type Hypothesis = Map<string, BlobType>
 type History = Map<string, BlobType>
-enum Instruction {
-  SKIP,
-  CANCEL,
-  CONTINUE
-}
 
 export function levelSolver(level: Level): Hypotheses {
-  const blobs = level.blobs;
   const hypothesis: Hypothesis = new Map;
-  const seenBlobs: History = new Map;
-  const blobsMap = new Map<string, Blob>(level.blobs.map(blob => [blob.name, blob]));
-  const nextSteps = [...blobs.map(blob => blob.name)];
-  const blob = blobs[0];
-  // Test True and Lie for first blob
-  const truthHypothesis = new Map(hypothesis);
-  const truthSeenBlobs = new Map(seenBlobs);
-  const truthNextSteps = [...nextSteps];
-  nextStep(truthHypothesis, truthSeenBlobs, blobType.TRUTH, truthNextSteps, blobsMap);
-  nextStep(hypothesis, seenBlobs, blobType.LIE, nextSteps, blobsMap);
-  return [hypothesis, truthHypothesis];
+  const blobsMap = blobMapFromList(level.blobs);
+
+  // Initialize an empty history map to track seen blobs
+  const history: History = new Map;
+
+  // Create an array of blob names to use as the next steps
+  const nextSteps = [...level.blobs.map(blob => blob.name)];
+
+  const solutions = splitSteps(hypothesis, history, nextSteps, blobsMap);
+  return solutions;
 }
 
-function nextStep(hypothesis: Hypothesis, history: History, targetHypothesis: BlobType, nextSteps: string[], blobs: Map<string, Blob>): Hypotheses {
-  const currentStep = nextSteps.pop();
-  if (!currentStep) {
-    console.log("No more steps");
-    console.log(`Hypothesis: \n${JSON.stringify([...hypothesis], null, 2)}`);
+// Creates 2 new hypotheses, one with the current blob as a liar and one with the current blob as a truth teller
+function splitSteps(hypothesis: Hypothesis, history: History, nextTargets: string[], blobsMap: Map<string, Blob>): Hypotheses {
+  const nextTarget = nextTargets.pop();
+  // If there is no next target and the hypothesis hasn`t been proved wrong, return the hypothesis as a solution
+  if (!nextTarget) {
+    console.log("Solution found!");
+    console.log(`Solution: ${JSON.stringify([...hypothesis], null, 2)}`);
     return [hypothesis];
   }
-  if (!history.has(currentStep)) {
-    console.log(``);
-    console.log(`Next Step!`);
-    console.log(`Hypothesis: \n${JSON.stringify([...hypothesis], null, 2)}`);
-    console.log(`History: \n${JSON.stringify([...history], null, 2)}`);
-    console.log(`Testing the hypothesis: ${currentStep} is ${targetHypothesis}`);
-  }
-  const targetBlob = blobs.get(currentStep);
-  if (!targetBlob) {
+  // All maps are duplicated to ensure that each hypothesis path is independent of the other
+  const lieHypothesis = new Map(hypothesis);
+  const lieSeenBlobs = new Map(history);
+  const lieNextTargets = [...nextTargets];
+
+  // Tests the Hypothesis of nextTarget being a liar
+  const correctLieHypothesis = runStep(lieHypothesis, lieSeenBlobs, nextTarget, blobType.LIE, lieNextTargets, blobsMap);
+
+  // Tests the Hypothesis of nextTarget being a truth teller
+  const correctTruthHypothesis = runStep(hypothesis, history, nextTarget, blobType.TRUTH, nextTargets, blobsMap);
+
+  // Returns all the solutions found on the 2 paths
+  return [...correctLieHypothesis, ...correctTruthHypothesis];
+}
+
+function runStep(
+  hypothesis: Hypothesis,
+  history: History,
+  blobName: string,
+  testType: BlobType,
+  nextBlobs: string[],
+  blobsMap: Map<string, Blob>
+): Hypotheses {
+
+  console.log(`Next Step!`);
+  console.log(`Hypothesis: \n${JSON.stringify([...hypothesis], null, 2)}`);
+  console.log(`History: \n${JSON.stringify([...history], null, 2)}`);
+  console.log(`Testing: ${blobName} is ${testType}`);
+
+  const blob = blobsMap.get(blobName);
+  if (!blob) {
     throw new Error("Blob not found");
   }
-  const stepResult = step(hypothesis, history, targetBlob, targetHypothesis, nextSteps);
-  if (stepResult === Instruction.SKIP) {
-    const correctNextHypothesis = nextStep(hypothesis, history, targetHypothesis, nextSteps, blobs);
-    return correctNextHypothesis;
-  }
-  if (stepResult === Instruction.CANCEL) {
+  // runs next Step, and checks if the hypothesis is still valid
+  const isValid = step(hypothesis, history, blob, testType, nextBlobs);
+
+  // If the hypothesis is not valid, return an empty array
+  if (!isValid) {
     return [];
+  } else {
+    // If the hypothesis is valid, continue by checking all possibilities
+    return splitSteps(hypothesis, history, nextBlobs, blobsMap);
   }
-  if (stepResult === Instruction.CONTINUE) {
-    // Recreate all fields for truth and lie
-    const lieHypothesis = new Map(hypothesis);
-    const lieSeenBlobs = new Map(history);
-    const lieNextSteps = [...nextSteps];
-    const correctLieHypothesis = nextStep(lieHypothesis, lieSeenBlobs, blobType.LIE, lieNextSteps, blobs);
-    const correctTruthHypothesis = nextStep(hypothesis, history, blobType.TRUTH, nextSteps, blobs);
-    return [...correctLieHypothesis, ...correctTruthHypothesis];
-  }
-  throw new Error(`Unexpected step result: ${stepResult}`);
 }
 
-function step(hypothesis: Hypothesis, history: History, target: Blob, targetHypothesis: BlobType, nextSteps: string[]): Instruction {
-  // If blob is already in the history, skip
-  if (history.has(target.name)) {
-    // console.log(target.name, "already seen")
-    return Instruction.SKIP;
-  }
+function step(
+  hypothesis: Hypothesis,
+  history: History,
+  blob: Blob,
+  testType: BlobType,
+  nextSteps: string[]
+): boolean {
+  console.log(`Next Step!`);
+  console.log(`Hypothesis: \n${JSON.stringify([...hypothesis], null, 2)}`);
+  console.log(`History: \n${JSON.stringify([...history], null, 2)}`);
+  console.log(`Testing: ${blob.name} is ${testType}`);
   // If blob is not in the history, add it
-  history.set(target.name, targetHypothesis);
+  history.set(blob.name, testType);
 
-  // Get status for Blob in the memory
-  const testHypothesisResult = testHypothesis(hypothesis, target.name, targetHypothesis);
+  // Test if the target's testing type coincides with current hypothesis
+  const testHypothesisResult = testHypothesis(hypothesis, blob.name, testType);
   if (!testHypothesisResult) {
-    console.log(`CANCELING the possibility \nhypothesis say: ${target.name} is ${hypothesis.get(target.name)} \nbut we're testing if ${target.name} is ${targetHypothesis}`)
-    return Instruction.CANCEL;
+    console.log(`Cancel: test of ${blob.name} being ${testType} \nCurrent hypothesis say it is ${hypothesis.get(blob.name)}`);
+    return false;
   }
 
-  const clue = target.clue;
+  // Tests if the current clue can be valid with the current hypothesis
+  // If it is valid, the hypothesis is updated with all the new information provided by the clue
+  const clue = blob.clue;
   if (clue.clueType === "specific") {
-    const shouldBeTrue = targetHypothesis == clue.blobType;
-    const accusationType = shouldBeTrue ? blobType.TRUTH : blobType.LIE;
-
-    const specificClueTest = testHypothesis(hypothesis, clue.blobName, accusationType);
-    if (!specificClueTest) {
-      console.log(`CANCELING by the assumption \nhypothesis say: ${clue.blobName} is ${hypothesis.get(clue.blobName)} \nbut we're testing if ${clue.blobName} is ${accusationType}`)
-      return Instruction.CANCEL;
-    }
-    nextSteps.push(clue.blobName);
+    return testSpecificClue(hypothesis, clue, testType, nextSteps);
   }
 
-  return Instruction.CONTINUE
-
+  return true;
 }
 
-function testHypothesis(history: Hypothesis, targetName: string, blobType: BlobType): boolean {
-  const targetInMemory = history.get(targetName);
-  if (targetInMemory) {
-    const isSafe = targetInMemory === blobType;
+function testSpecificClue(
+  hypothesis: Hypothesis,
+  clue: SpecificClue,
+  testType: BlobType,
+  nextSteps: string[]
+): boolean {
+
+  // The clue's real type is dependent of the clue teller's type
+  //
+  //        Clue
+  //     | T | L |
+  //      
+  //     | T | L |  | T | <- clue teller is real  
+  //     | L | T |  | L | <- clue teller is fake
+  //
+
+  let accusationType: BlobType;
+  if (testType === blobType.TRUTH) {
+    if (clue.blobType === blobType.TRUTH) {
+      accusationType = blobType.TRUTH
+    } else {
+      accusationType = blobType.LIE
+    }
+  } else {
+    if (clue.blobType === blobType.TRUTH) {
+      accusationType = blobType.LIE
+    } else {
+      accusationType = blobType.TRUTH
+    }
+  }
+
+  // Test if the clue's target Blob coincides with current hypothesis
+  const specificClueTest = testHypothesis(hypothesis, clue.blobName, accusationType);
+  if (!specificClueTest) {
+    console.log(`Cancel: assumption that ${clue.blobName} is ${accusationType} \nCurrent hypothesis say it is ${hypothesis.get(clue.blobName)}`)
+    return false;
+  }
+
+  // If the hypothesis is valid, move the clue's target to the start of the next steps
+  moveElementToStart(nextSteps, clue.blobName);
+  return true;
+}
+
+// Test if a given blob's type, checking if it has the same type as it has in the hypothesis
+//   if it does not exists in the hypothesis, it is added
+//   if it exists and is different, the hypothesis is invalid
+//   if it exists and is the same, the hypothesis remains valid
+function testHypothesis(hypothesis: Hypothesis, targetName: string, blobType: BlobType): boolean {
+  const testType = hypothesis.get(targetName);
+  if (testType) {
+    const isSafe = testType === blobType;
     return isSafe;
   } else {
-    history.set(targetName, blobType);
-    console.log(`Adding ${targetName} to hypothesis as ${blobType}`);
+    hypothesis.set(targetName, blobType);
+    console.log(`Add ${targetName} to hypothesis as ${blobType}`);
     return true;
   }
 }
-

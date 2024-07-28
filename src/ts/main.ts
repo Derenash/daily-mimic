@@ -1,8 +1,9 @@
 import { level_0, tutorial } from './levels/index.js';
 import { createMainElement } from './web/createMainElement.js';
 import { createCharAndChatContainer } from './web/createCharAndChatContainer.js';
-import { Blob, levelSolver } from './types/blobTypes.js';
+import { levelSolver } from './types/blobTypes.js';
 import { setupMessageHighlighting } from './utils/messageHighlighting.js';
+import { blobMapFromList } from './utils/generalUtils.js';
 
 const level = tutorial();
 // const level = level_0();
@@ -12,7 +13,7 @@ console.log("Solutions for the Level:" + level.name);
 solutions.forEach(solution => {
   console.log(JSON.stringify([...solution]));
 })
-const blobsMap = new Map<string, Blob>(level.blobs.map(blob => [blob.name, blob]));
+const blobsMap = blobMapFromList(level.blobs);
 
 document.addEventListener('DOMContentLoaded', () => {
   // apply all styles
