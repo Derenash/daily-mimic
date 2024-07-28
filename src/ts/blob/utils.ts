@@ -1,4 +1,4 @@
-import { AllClue, Blob, BlobColor, BlobGroup, BlobType, Clue, ClueTarget, ClueTargetAll, ClueTargetQuantity, ClueTargetRange, ClueTargetSome, ColorClue, GroupSide, SideClue, SpecificClue } from "../types";
+import { AllClue, Blob, BlobColor, BlobType, Clue, ClueTarget, ClueTargetAll, ClueTargetRange, ClueTargetSome, ColorClue, GroupSide, SideClue, SpecificClue } from "../types";
 
 export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map<string, Blob>): string {
   const target = blobsMap.get(targetName);
@@ -37,13 +37,6 @@ export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map
   }
 
   return "false";
-}
-
-export function blobGroup(blobs: Blob[], side?: GroupSide): BlobGroup {
-  return {
-    side: side,
-    blobs: blobs
-  };
 }
 
 export function blob(name: string, color: BlobColor, clue: Clue, side?: GroupSide): Blob {
@@ -98,13 +91,6 @@ export function targetAll(): ClueTargetAll {
 export function targetSome(): ClueTargetSome {
   return {
     type: "some"
-  };
-}
-
-export function targetQuantity(amount: number): ClueTargetQuantity {
-  return {
-    type: "quantity",
-    amount: amount
   };
 }
 

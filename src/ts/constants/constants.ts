@@ -7,8 +7,6 @@ export const blobColor = {
   ORANGE: "orange",
 } as const;
 
-export const blobColors = Object.values(blobColor);
-
 export const blobType = {
   TRUTH: "truth",
   LIE: "lie"
@@ -20,6 +18,8 @@ export const groupSide = {
   TOP: "top",
   BOTTOM: "bottom"
 } as const;
+
+export const blobColors = Object.values(blobColor);
 
 export const groupSides = Object.values(groupSide);
 

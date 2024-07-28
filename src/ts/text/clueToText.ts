@@ -74,7 +74,8 @@ export function getAllPrefix(isPlural: boolean): string {
 //          ColorClue
 // Todos            são      
 // Algum            é        
-// 1 a 3                       
+// 1 a 3            é/são
+// 2                é                        
 //        Laranjas             
 //        Vermelhos
 //        Azuis

@@ -3,7 +3,15 @@ import { Blob, BlobColor, Clue, ClueTarget } from "../types/index.js";
 
 export function getIsPlural(clue: Clue): boolean {
   if (clue.clueType === "color" || clue.clueType === "side") {
-    return clue.target.type === "all" || clue.target.type === "range";
+    if (clue.target.type === "all") {
+      return true;
+    }
+    if (clue.target.type === "range") {
+      if (clue.target.minimum === clue.target.maximum) {
+        return false
+      }
+      return true
+    }
   } else if (clue.clueType === "specific") {
     return false;
   } else if (clue.clueType === "all") {
@@ -19,10 +27,10 @@ export function getAmountText(amount: ClueTarget): string {
   if (amount.type === "some") {
     return "Algum";
   }
-  if (amount.type === "quantity") {
-    return "apenas " + amount.amount.toString();
-  }
   if (amount.type === "range") {
+    if (amount.minimum === amount.maximum) {
+      return "apenas " + amount.minimum.toString();
+    }
     return `entre ${amount.minimum} a ${amount.maximum}`;
   }
   return "";
