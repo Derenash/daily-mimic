@@ -98,7 +98,12 @@ export function levelSolver(level: Level): Hypotheses {
 }
 
 // Creates 2 new hypotheses, one with the current blob as a liar and one with the current blob as a truth teller
-function splitSteps(hypothesis: Hypothesis, history: History, nextTargets: string[], blobsMap: Map<string, Blob>): Hypotheses {
+function splitSteps(
+  hypothesis: Hypothesis,
+  history: History,
+  nextTargets: string[],
+  blobsMap: Map<string, Blob>
+): Hypotheses {
   const nextTarget = nextTargets.pop();
   // If there is no next target and the hypothesis hasn`t been proved wrong, return the hypothesis as a solution
   if (!nextTarget) {
@@ -164,6 +169,7 @@ function step(
   console.log(`Testing: ${blob.name} is ${testType}`);
   // If blob is not in the history, add it
   history.set(blob.name, testType);
+
 
   // Test if the target's testing type coincides with current hypothesis
   const testHypothesisResult = testHypothesis(hypothesis, blob.name, testType);
