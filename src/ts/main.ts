@@ -11,7 +11,7 @@ const solutions = levelSolver(level);
 console.log("Solutions for the Level:" + level.name);
 // console.log(JSON.stringify([...solutions], null, 2));
 solutions.forEach(solution => {
-  console.log(JSON.stringify([...solution]));
+  console.log(JSON.stringify([...solution.blobs]));
 })
 const blobsMap = blobMapFromList(level.blobs);
 

@@ -80,11 +80,57 @@ export interface ClueTargetRange {
 // ]);
 
 type Hypotheses = Hypothesis[]
-type Hypothesis = Map<string, BlobType>
+
+class Hypothesis {
+  public blobs: Map<string, BlobType>;
+  public lierCount: number;
+  private minimumLiers: number;
+  private maximumLiers: number;
+
+  constructor(minimumLiers: number, maximumLiers: number, blobs?: Map<string, BlobType>, lierCount?: number) {
+    this.blobs = blobs || new Map<string, BlobType>();
+    this.lierCount = lierCount || 0;
+    this.minimumLiers = minimumLiers;
+    this.maximumLiers = maximumLiers;
+  }
+
+  public checkAndUpdateHypothesis(blobName: string, blobClassification: BlobType): boolean {
+    const existingClassification = this.blobs.get(blobName);
+    if (existingClassification) {
+      const isConsistent = existingClassification === blobClassification;
+      return isConsistent;
+    } else {
+      this.blobs.set(blobName, blobClassification);
+      if (blobClassification === blobType.LIE) {
+        const isValid = this.tryIncrementLierCount();
+        if (!isValid) {
+          return false;
+        }
+      }
+      console.log(`Add ${blobName} to hypothesis as ${blobClassification}`);
+      return true;
+    }
+  }
+
+  private tryIncrementLierCount(): boolean {
+    if (this.lierCount < this.maximumLiers) {
+      this.lierCount++;
+      return true;
+    }
+    return false;
+  }
+
+  public clone(): Hypothesis {
+    const newBlobs = new Map<string, BlobType>(this.blobs);
+    const newHypothesis = new Hypothesis(this.minimumLiers, this.maximumLiers, newBlobs, this.lierCount);
+    return newHypothesis;
+  }
+}
+
 type History = Map<string, BlobType>
 
 export function levelSolver(level: Level): Hypotheses {
-  const hypothesis: Hypothesis = new Map;
+  const hypothesis: Hypothesis = new Hypothesis(level.minimumLiers, level.maximumLiers);
   const blobsMap = blobMapFromList(level.blobs);
 
   // Initialize an empty history map to track seen blobs
@@ -108,11 +154,11 @@ function splitSteps(
   // If there is no next target and the hypothesis hasn`t been proved wrong, return the hypothesis as a solution
   if (!nextTarget) {
     console.log("Solution found!");
-    console.log(`Solution: ${JSON.stringify([...hypothesis], null, 2)}`);
+    console.log(`Solution: ${JSON.stringify([...hypothesis.blobs], null, 2)}`);
     return [hypothesis];
   }
   // All maps are duplicated to ensure that each hypothesis path is independent of the other
-  const lieHypothesis = new Map(hypothesis);
+  const lieHypothesis = hypothesis.clone();
   const lieSeenBlobs = new Map(history);
   const lieNextTargets = [...nextTargets];
 
@@ -136,7 +182,7 @@ function runStep(
 ): Hypotheses {
 
   console.log(`Next Step!`);
-  console.log(`Hypothesis: \n${JSON.stringify([...hypothesis], null, 2)}`);
+  console.log(`Hypothesis: \n${JSON.stringify([...hypothesis.blobs], null, 2)}`);
   console.log(`History: \n${JSON.stringify([...history], null, 2)}`);
   console.log(`Testing: ${blobName} is ${testType}`);
 
@@ -164,7 +210,7 @@ function step(
   nextSteps: string[]
 ): boolean {
   console.log(`Next Step!`);
-  console.log(`Hypothesis: \n${JSON.stringify([...hypothesis], null, 2)}`);
+  console.log(`Hypothesis: \n${JSON.stringify([...hypothesis.blobs], null, 2)}`);
   console.log(`History: \n${JSON.stringify([...history], null, 2)}`);
   console.log(`Testing: ${blob.name} is ${testType}`);
   // If blob is not in the history, add it
@@ -172,9 +218,9 @@ function step(
 
 
   // Test if the target's testing type coincides with current hypothesis
-  const testHypothesisResult = testHypothesis(hypothesis, blob.name, testType);
+  const testHypothesisResult = hypothesis.checkAndUpdateHypothesis(blob.name, testType);
   if (!testHypothesisResult) {
-    console.log(`Cancel: test of ${blob.name} being ${testType} \nCurrent hypothesis say it is ${hypothesis.get(blob.name)}`);
+    console.log(`Cancel: test of ${blob.name} being ${testType} \nCurrent hypothesis say it is ${hypothesis.blobs.get(blob.name)}`);
     return false;
   }
 
@@ -220,29 +266,13 @@ function testSpecificClue(
   }
 
   // Test if the clue's target Blob coincides with current hypothesis
-  const specificClueTest = testHypothesis(hypothesis, clue.blobName, accusationType);
+  const specificClueTest = hypothesis.checkAndUpdateHypothesis(clue.blobName, accusationType);
   if (!specificClueTest) {
-    console.log(`Cancel: assumption that ${clue.blobName} is ${accusationType} \nCurrent hypothesis say it is ${hypothesis.get(clue.blobName)}`)
+    console.log(`Cancel: assumption that ${clue.blobName} is ${accusationType} \nCurrent hypothesis say it is ${hypothesis.blobs.get(clue.blobName)}`)
     return false;
   }
 
   // If the hypothesis is valid, move the clue's target to the start of the next steps
   moveElementToStart(nextSteps, clue.blobName);
   return true;
-}
-
-// Test if a given blob's type, checking if it has the same type as it has in the hypothesis
-//   if it does not exists in the hypothesis, it is added
-//   if it exists and is different, the hypothesis is invalid
-//   if it exists and is the same, the hypothesis remains valid
-function testHypothesis(hypothesis: Hypothesis, targetName: string, blobType: BlobType): boolean {
-  const testType = hypothesis.get(targetName);
-  if (testType) {
-    const isSafe = testType === blobType;
-    return isSafe;
-  } else {
-    hypothesis.set(targetName, blobType);
-    console.log(`Add ${targetName} to hypothesis as ${blobType}`);
-    return true;
-  }
 }
