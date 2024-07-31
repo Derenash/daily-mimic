@@ -1,18 +1,48 @@
-import { level_0, tutorial } from './levels/index.js';
+import { level_0, tutorial2, tutorial } from './levels/index.js';
 import { createMainElement } from './web/createMainElement.js';
 import { createCharAndChatContainer } from './web/createCharAndChatContainer.js';
 import { levelSolver } from './types/blobTypes.js';
 import { setupMessageHighlighting } from './utils/messageHighlighting.js';
-import { blobMapFromList } from './utils/generalUtils.js';
+import { blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
 
-const level = tutorial();
-// const level = level_0();
+// const level = tutorial();
+// const level = tutorial2();
+const level = level_0();
+resetCount()
+localStorage.setItem("debug", "true");
+
+// Start the timer
+const startTime = performance.now();
+
+
+
+// Your original code
+// for (let id = 0; id < 10000; id++) {
+// levelSolver(level);
+// }
+
+// End the timer
+const endTime = performance.now();
+
+// Calculate the execution time
+const executionTime = endTime - startTime;
+
 const solutions = levelSolver(level);
-console.log("Solutions for the Level:" + level.name);
-// console.log(JSON.stringify([...solutions], null, 2));
+getCount()
+
 solutions.forEach(solution => {
   console.log(JSON.stringify([...solution.blobs]));
+  console.log(solution.lierCount);
 })
+
+// Log the results
+console.log(`Execution time: ${executionTime} milliseconds`);
+console.log(`Average time per iteration: ${executionTime / 10000} milliseconds`);
+// console.log("Solutions for the Level:" + level.name);
+// console.log(JSON.stringify([...solutions], null, 2));
+// solutions.forEach(solution => {
+//   console.log(JSON.stringify([...solution.blobs]));
+// })
 const blobsMap = blobMapFromList(level.blobs);
 
 document.addEventListener('DOMContentLoaded', () => {
