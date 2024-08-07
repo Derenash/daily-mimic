@@ -6,10 +6,10 @@ import { setupMessageHighlighting } from './utils/messageHighlighting.js';
 import { blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
 import { level_2 } from './levels/level_2.js';
 
-// const level = tutorial();
+const level = tutorial();
 // const level = tutorial2();
 // const level = level_0();
-const level = level_2();
+// const level = level_2();
 resetCount()
 localStorage.setItem("debug", "true");
 

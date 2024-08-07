@@ -3,7 +3,7 @@
   --main-font-weight: 600;
   --min-width: min(calc(100vw - var(--min-margin)), 768px);
   --min-margin: 25px;
-  --stroke-width: 2px;
+  --stroke-width: 3px;
   --chat-border-radius: 50px;
   --character-proportion: 1;
   --chat-container-aspect-ratio: 1.8;
@@ -18,7 +18,8 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #382F2F;
+  background-color: lightblue;
+  /* background-color: #382F2F; */
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -88,10 +89,13 @@ body {
   justify-content: flex-end;
   align-items: center;
   gap: var(--side-group-gap);
+  --bubble-stroke-width: calc(var(--stroke-width) * 0.6);
+  --chat-stroke-width: calc(var(--stroke-width));
 }
 
 .char-and-chat-container:hover {
-  --stroke-width: (var(--stroke-width) * 2);
+  --chat-stroke-width: calc(var(--stroke-width) * 1.5);
+  --bubble-stroke-width: calc(var(--stroke-width) * 1.5);
 }
 
 .char-and-chat-container.right {
@@ -162,7 +166,7 @@ body {
 }
 
 .chat-rectangle.stroke {
-  outline-width: var(--stroke-width);
+  outline-width: var(--chat-stroke-width);
   outline-style: solid;
   outline-color: var(--chat-stroke-color);
   border-radius: var(--chat-border-radius);
@@ -185,14 +189,14 @@ body {
 .bubble.left {
   left: 0;
   bottom: 0;
-  transform: translate(-15%, 20%);
+  transform: translate(-15%, 10%);
   --bubble-transform: rotate(45deg);
 }
 
 .bubble.right {
   right: 0;
   bottom: 0;
-  transform: translate(115%, 20%);
+  transform: translate(115%, 10%);
   --bubble-transform: rotate(-45deg) scaleX(-1);
 }
 
@@ -204,7 +208,7 @@ body {
 
 .bubble .stroke {
   stroke: var(--chat-stroke-color);
-  stroke-width: var(--stroke-width);
+  stroke-width: var(--bubble-stroke-width);
   stroke-linejoin: round;
 }
 
