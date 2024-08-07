@@ -7,7 +7,7 @@ export function getIsPlural(clue: Clue): boolean {
       return true;
     }
     if (clue.target.type === "range") {
-      if (clue.target.minimum === clue.target.maximum) {
+      if (clue.target.maximum === 1) {
         return false
       }
       return true

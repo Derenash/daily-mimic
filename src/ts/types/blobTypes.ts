@@ -352,7 +352,7 @@ class Hypothesis {
       return isConsistent;
     } else {
       this.blobs.set(blobName, blobType);
-      if (blobType === blobClassification.LIE) {
+      if (blobType == blobClassification.LIE) {
         const isValid = this.tryIncrementLierCount();
         if (!isValid) {
           return false;
