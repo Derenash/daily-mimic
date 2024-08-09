@@ -1,9 +1,9 @@
 :root {
   --main-font: 'Baloo 2', cursive;
   --main-font-weight: 600;
-  --min-width: min(calc(100vw - var(--min-margin)), 768px);
-  --min-margin: 25px;
-  --stroke-width: 3px;
+  --min-width: min(calc(100vw - var(--min-margin)), 640px);
+  --min-margin: 12px;
+  --stroke-width: 2px;
   --chat-border-radius: 50px;
   --character-proportion: 1;
   --chat-container-aspect-ratio: 1.8;
@@ -133,8 +133,7 @@ a.stats {
 
 body {
   font-family: Arial, sans-serif;
-  background-color: lightblue;
-  /* background-color: #382F2F; */
+  background-color: var(--background-color);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -241,13 +240,11 @@ a:hover {
   justify-content: flex-end;
   align-items: center;
   gap: var(--side-group-gap);
-  --bubble-stroke-width: calc(var(--stroke-width) * 0.6);
-  --chat-stroke-width: calc(var(--stroke-width));
 }
 
 .char-and-chat-container:hover {
-  --chat-stroke-width: calc(var(--stroke-width) * 1.5);
-  --bubble-stroke-width: calc(var(--stroke-width) * 1.5);
+  --stroke-width: (var(--stroke-width) * 2);
+  cursor: pointer;
 }
 
 .char-and-chat-container.right {
@@ -348,7 +345,7 @@ a:hover {
 }
 
 .chat-rectangle.stroke {
-  outline-width: var(--chat-stroke-width);
+  outline-width: var(--stroke-width);
   outline-style: solid;
   outline-color: var(--chat-stroke-color);
   border-radius: var(--chat-border-radius);
@@ -371,14 +368,14 @@ a:hover {
 .bubble.left {
   left: 0;
   bottom: 0;
-  transform: translate(-15%, 10%);
+  transform: translate(-15%, 20%);
   --bubble-transform: rotate(45deg);
 }
 
 .bubble.right {
   right: 0;
   bottom: 0;
-  transform: translate(115%, 10%);
+  transform: translate(115%, 20%);
   --bubble-transform: rotate(-45deg) scaleX(-1);
 }
 
@@ -390,7 +387,7 @@ a:hover {
 
 .bubble .stroke {
   stroke: var(--chat-stroke-color);
-  stroke-width: var(--bubble-stroke-width);
+  stroke-width: var(--stroke-width);
   stroke-linejoin: round;
 }
 

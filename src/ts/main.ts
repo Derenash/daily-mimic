@@ -4,7 +4,7 @@ import { LevelSolver } from './solutions/findLevelSolutions.js';
 import { setupMessageHighlighting } from './utils/messageHighlighting.js';
 import { blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
 
-const level = tutorial();
+const level = tutorial1();
 // const level = tutorial2();
 // const level = level_0();
 // const level = level_2();
