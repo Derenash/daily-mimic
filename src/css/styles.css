@@ -8,6 +8,7 @@
   --character-proportion: 1;
   --chat-container-aspect-ratio: 1.8;
   --header-size: 45px;
+  --header-vertical-padding: 10px;
   --bubble-arrow-size: calc(0.1 * var(--min-width));
   --side-group-gap: calc(0.03 * var(--min-width));
   --side-group-width: calc(0.5 * var(--min-width));
@@ -47,7 +48,7 @@
 header {
   border-bottom: 1px solid var(--header-border-color);
   width: 100vw;
-  padding: 10px 0;
+  padding: var(--header-vertical-padding) 0;
   position: fixed;
   height: var(--header-size);
   top: 0;
@@ -59,7 +60,7 @@ header {
   align-items: center;
 }
 
-a {
+header a {
   font-family: var(--main-font);
   font-weight: var(--main-font-weight);
   font-size: var(--font-size);
@@ -89,6 +90,7 @@ a.stats {
   display: flex;
   flex-direction: row;
   height: 100%;
+  max-width: 500px;
   align-items: center;
 }
 
@@ -113,19 +115,6 @@ a.stats {
 .header-section.middle {
   justify-content: center;
 }
-
-.hamburger-icon {
-  display: none;
-}
-
-.hamburger.item {
-  display: block;
-  width: 100%;
-  height: 32px;
-  margin: 5px auto;
-  background-color: #000;
-}
-
 
 .nav-link {
   display: block
@@ -575,6 +564,14 @@ Fake {
   right: 8px;
 }
 
+.hamburger-icon {
+  display: none;
+}
+
+.hamburger-items {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .hamburger {
     display: block;
@@ -582,10 +579,116 @@ Fake {
   }
 
   .hamburger-icon {
-    display: block;
-    height: 55%;
+    position: fixed;
+    right: 5%;
+    display: flex;
+    height: var(--header-size);
     opacity: 0.5;
   }
+
+  .hamburger-items {
+    position: fixed;
+    top: calc(var(--header-size) + var(--header-vertical-padding) * 2);
+    left: 0;
+    right: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--background-color);
+    transition:
+      max-height 0.5s ease-out,
+      opacity 0.3s ease-in,
+      border 0.3s ease-out;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    border: 0 solid var(--header-border-color);
+  }
+
+  .hamburger-items.active,
+  .hamburger-items.hover {
+    transition:
+      max-height 0.5s ease-out,
+      opacity 0.3s ease-out,
+      border 0.3s ease-out;
+  }
+
+  .hamburger-items.show {
+    max-height: 1000px;
+    /* Adjust this value based on your needs */
+    opacity: 1;
+    border-width: 1px;
+    border-top: none;
+  }
+
+  .hamburger-items li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* height: calc((var(--header-size) + var(--header-vertical-padding) * 2) * 2); */
+    padding: 20px 0;
+    /* border-top: 1px solid var(--header-border-color); */
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+
+  .hamburger-items li a {
+    font-family: var(--main-font);
+    font-weight: var(--main-font-weight);
+    font-size: 32px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    line-height: calc(var(--header-size) - 10px);
+    height: calc(var(--header-size) - 10px);
+    color: #FAFAFF;
+    padding: 0 10px;
+    margin: 0;
+    filter: brightness(80%);
+    transition: filter 0.3s ease;
+  }
+
+  .hamburger-items li a:hover {
+    filter: brightness(100%);
+  }
+
+  .hamburger-items.show li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hamburger-items.show li:nth-child(1) {
+    transition-delay: calc(0.1s + 0.5s);
+  }
+
+  .hamburger-items.show li:nth-child(2) {
+    transition-delay: calc(0.2s + 0.5s);
+  }
+
+  .hamburger-items.show li:nth-child(3) {
+    transition-delay: calc(0.3s + 0.5s);
+  }
+
+  .hamburger-items.show li:nth-child(4) {
+    transition-delay: calc(0.4s + 0.5s);
+  }
+
+  .hamburger-items.show li:nth-child(5) {
+    transition-delay: calc(0.5s + 0.5s);
+  }
+
+  /* Add more nth-child rules if you have more items */
 
   .nav-link {
     display: none;

@@ -67,6 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add click event listener to the mode toggle button
   modeToggles.forEach(x => x.addEventListener('click', toggleMode));
 
+  const hamburger = document.querySelector('.hamburger-icon');
+  const menuItems = document.querySelector('.hamburger-items');
+
+  if (hamburger && menuItems) {
+    hamburger.addEventListener('click', function () {
+      menuItems.classList.toggle('show');
+    });
+  }
+
   const blobs = level.blobs;
 
   blobs.forEach(blob => {
