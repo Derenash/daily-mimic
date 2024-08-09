@@ -1,22 +1,19 @@
-import { level_0, tutorial2, tutorial } from './levels/index.js';
-import { createMainElement } from './web/createMainElement.js';
-import { createCharAndChatContainer } from './web/createCharAndChatContainer.js';
-import { levelSolver } from './types/blobTypes.js';
+import { level1, level2, tutorial1, tutorial2 } from './levels/index.js';
+import { createCharAndChatContainer, createInitialBlobCheckStates } from './web/index.js';
+import { LevelSolver } from './solutions/findLevelSolutions.js';
 import { setupMessageHighlighting } from './utils/messageHighlighting.js';
 import { blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
-import { level_2 } from './levels/level_2.js';
 
 const level = tutorial();
 // const level = tutorial2();
 // const level = level_0();
 // const level = level_2();
 resetCount()
-localStorage.setItem("debug", "true");
+localStorage.setItem("debug", "false");
+// localStorage.setItem("debug", "true");
 
 // Start the timer
-const startTime = performance.now();
-
-
+// const startTime = performance.now();
 
 // Your original code
 // for (let id = 0; id < 10000; id++) {
@@ -24,66 +21,53 @@ const startTime = performance.now();
 // }
 
 // End the timer
-const endTime = performance.now();
+// const endTime = performance.now();
 
 // Calculate the execution time
-const executionTime = endTime - startTime;
+// const executionTime = endTime - startTime;
 
-const solutions = levelSolver(level);
-getCount()
-
-solutions.forEach(solution => {
-  console.log(JSON.stringify([...solution.blobs]));
-  console.log(solution.lierCount);
-})
 
 // Log the results
-console.log(`Execution time: ${executionTime} milliseconds`);
-console.log(`Average time per iteration: ${executionTime / 10000} milliseconds`);
+// console.log(`Execution time: ${executionTime} milliseconds`);
+// console.log(`Average time per iteration: ${executionTime / 10000} milliseconds`);
 // console.log("Solutions for the Level:" + level.name);
 // console.log(JSON.stringify([...solutions], null, 2));
 // solutions.forEach(solution => {
 //   console.log(JSON.stringify([...solution.blobs]));
 // })
+
+const levelSolver = new LevelSolver(level);
+const solutions = levelSolver.findSolutions();
+const count = getCount()
+console.log("Paths Taken: " + count);
+
+solutions.forEach(solution => {
+  console.log(JSON.stringify([...solution.blobsClassifications]));
+  console.log(solution.currentLiarCount);
+})
+
+createInitialBlobCheckStates(level.blobs);
+
 const blobsMap = blobMapFromList(level.blobs);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // apply all styles
-  const main: HTMLElement = createMainElement();
-  main.className = 'game-container';
-  document.body.appendChild(main);
+  const modeToggles = document.querySelectorAll('.mode-toggle') as NodeListOf<HTMLElement>;
+  const topRow = document.querySelector('.group.top') as HTMLElement;
+  const leftColumn = document.querySelector('.middle-row .group.left') as HTMLElement;
+  const rightColumn = document.querySelector('.middle-row .group.right') as HTMLElement;
+  const bottomRow = document.querySelector('.group.bottom') as HTMLElement;
 
-  if (!main) {
-    console.error("No main found");
-    return;
+  // Function to toggle between light and dark mode
+  function toggleMode() {
+    document.documentElement.classList.toggle('dark-mode');
+    document.documentElement.classList.toggle('light-mode');
+    modeToggles.forEach(x => x.classList.toggle('dark-mode'));
   }
 
+  // Add click event listener to the mode toggle button
+  modeToggles.forEach(x => x.addEventListener('click', toggleMode));
+
   const blobs = level.blobs;
-
-  const topRow = document.createElement('div');
-  topRow.className = 'group';
-  topRow.classList.add('top');
-
-  const middleRow = document.createElement('div');
-  middleRow.className = 'middle-row';
-
-  const bottomRow = document.createElement('div');
-  bottomRow.className = 'group';
-  bottomRow.classList.add('bottom');
-
-  const leftColumn = document.createElement('div');
-  leftColumn.className = 'group';
-  leftColumn.classList.add('left');
-
-  const rightColumn = document.createElement('div');
-  rightColumn.className = 'group';
-  rightColumn.classList.add('right');
-
-  middleRow.appendChild(leftColumn);
-  middleRow.appendChild(rightColumn);
-  main.appendChild(topRow);
-  main.appendChild(middleRow);
-  main.appendChild(bottomRow);
 
   blobs.forEach(blob => {
     let target: HTMLElement | null = null;
@@ -106,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const charAndChatContainer = createCharAndChatContainer(blob);
     if (charAndChatContainer) target.appendChild(charAndChatContainer);
-  })
+  });
+
   setupMessageHighlighting(blobsMap);
 });
+

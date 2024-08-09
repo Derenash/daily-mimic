@@ -1,45 +1,4 @@
-import { Blob } from "../types/index.js";
-import { createImageElement, setDelayToCharacters } from "./utils.js";
-
-export function createBlobElement(blob: Blob): HTMLDivElement {
-  const color = blob.color;
-  const name = blob.name;
-  const characterContainerContainer = document.createElement('div');
-  characterContainerContainer.classList.add('char-and-name-container');
-
-  const characterName = document.createElement('div');
-  characterName.classList.add('character-name');
-  characterName.textContent = name;
-
-  const characterContainer = document.createElement('div');
-  characterContainer.classList.add('char-imgs-container');
-
-  let path = "./assets/img/"
-
-  const body = document.createElement('div') as HTMLImageElement;
-
-  const noMouth = `
-  <svg style="width: 100%; height: 100%;" viewBox="0 0 110 74" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <g clip-path="url(#clip0_20_724)">
-    <path d="M54 28C40 29 21 38 23 59C24 75 48 73 60 73C74 73 89 73 89 58C89 27 63 28 54 28Z" fill="var(--blob-head-color)"/>
-    <path d="M54 56C58 53 56 44 50 44C49 44 45 45 44 50C43 58 50 60 54 56Z" fill="black"/>
-    <path d="M53 49C53 47 51 46 50 46C50 46 48 46 48 47C47 48 48 50 49 51C50 51 53 51 53 49Z" fill="var(--blob-eye-color)"/>
-    <path d="M81 56C85 53 83 44 77 44C76 44 72 45 71 50C70 57 77 60 81 56Z" fill="black"/>
-    <path d="M79 49C79 47 78 46 77 46C76 46 75 46 75 47C74 48 75 50 76 51C77 51 79 51 79 49Z" fill="var(--blob-eye-color)"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M73 71C63 72 33 72 32 60C32 43 68 34 86 41C78 27 61 28 54 28C40 29 21 38 23 59C24 74 46 74 59 73C59 73 60 73 60 73C61 73 62 73 62 73C64 73 67 73 69 73L73 71Z" fill="black" fill-opacity="0.2"/>
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M74 32C67 29 59 29 54 29C48 30 40 32 33 37C27 42 23 49 24 59C24 62 26 65 28 67C30 69 34 70 37 71C44 72 53 72 59 72C59 72 60 72 60 72C61 72 62 72 62 72C68 72 74 72 79 70C82 69 84 68 86 66C87 64 88 61 88 58C88 50 86 45 84 41C81 37 78 34 74 32ZM86 40C89 44 90 50 90 58C90 62 89 65 87 67C86 69 83 71 80 72C75 74 68 74 62 74C61 74 60 74 60 74C59 74 59 74 58 74C53 75 44 75 37 73C33 72 29 71 26 69C24 67 22 63 21 59C21 48 25 40 32 35C39 30 47 28 54 27C59 27 67 26 75 30C79 32 83 35 86 40Z" fill="black"/>
-    </g>
-    <defs>
-    <clipPath id="clip0_20_724">
-    <rect width="110" height="74" fill="var(--blob-head-color)"/>
-    </clipPath>
-    </defs>
-  </svg>
-  `
-
-  const yesMouth =
-    `
-    <svg style="width: 100%; height: 100%;" viewBox="0 0 110 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+ <svg style="width: 100%; height: 100%;" viewBox="0 0 110 74" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_23_463)">
         <path d="M54.2635 28.3277C40.3844 29.4879 21.1079 38.2858 22.5536 58.7822C23.6925 74.928 47.9665 73.4456 60.2393 73.091C73.6365 72.704 89.0577 73.091 89.0577 57.7187C89.0577 27.1674 62.9027 27.6056 54.2635 28.3277Z" fill="var(--blob-head-color)"/>
         <path d="M59.0883 61.8991C58.3238 64.1467 62.7096 66.5962 65.0034 63C66.915 65.2476 70.9397 64.1467 69.7928 61" stroke="black" stroke-opacity="0.95" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -56,26 +15,3 @@ export function createBlobElement(blob: Blob): HTMLDivElement {
         </clipPath>
       </defs>
     </svg>
-    `
-
-
-  // body.innerHTML = noMouth
-  body.innerHTML = yesMouth
-
-
-  body.classList.add('character', 'body');
-
-  const hat = createImageElement('hat', `${path}hat-${color}.svg`);
-
-  body.classList.add('idle');
-  hat.classList.add('idle');
-
-  setDelayToCharacters([body, hat], 1000);
-
-  characterContainer.appendChild(body);
-  characterContainer.appendChild(hat);
-  characterContainerContainer.appendChild(characterContainer);
-  characterContainerContainer.appendChild(characterName);
-
-  return characterContainerContainer;
-}

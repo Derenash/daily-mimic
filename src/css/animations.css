@@ -57,3 +57,13 @@
   animation-duration: 1s;
   animation-iteration-count: infinite;
 }
+
+.char-and-chat-container.green .character.hat,
+.char-and-chat-container.red .character.hat,
+.char-and-chat-container.yellow .character.hat,
+.char-and-chat-container.green .character.body,
+.char-and-chat-container.red .character.body,
+.char-and-chat-container.yellow .character.body {
+  /* remove animation */
+  animation: none;
+}

@@ -1,5 +1,5 @@
-import { blobColor, blobType } from "../constants/index.js";
-import { Blob, BlobColor, Clue, ClueTarget } from "../types/index.js";
+import { blobColor, blobType } from "../../constants/index.js";
+import { Blob, BlobColor, Clue, ClueTarget } from "../../types/index.js";
 
 export function getIsPlural(clue: Clue): boolean {
   if (clue.clueType === "color" || clue.clueType === "side") {
@@ -22,10 +22,10 @@ export function getIsPlural(clue: Clue): boolean {
 
 export function getAmountText(amount: ClueTarget): string {
   if (amount.type === "all") {
-    return "Todos";
+    return "todos";
   }
   if (amount.type === "some") {
-    return "Algum";
+    return "algum";
   }
   if (amount.type === "range") {
     if (amount.minimum === amount.maximum) {
@@ -67,9 +67,9 @@ export function getSidePrefix(side: string | undefined, blob: Blob): string {
     return "";
   }
   if (blob.side === side) {
-    return "Aqui";
+    return "aqui";
   } else {
-    return "Lá";
+    return "lá";
   }
 }
 
@@ -91,4 +91,8 @@ export function getSideText(side: string): string {
 
 export function getVerbText(isPlural: boolean): string {
   return isPlural ? "são" : "é";
+}
+
+export function firstToUpper(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }

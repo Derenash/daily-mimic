@@ -59,7 +59,7 @@ export function log(message: string, ...optionalParams: any[]): void {
   }
 }
 
-export function count() {
+export function addToLocalCount() {
   const count = localStorage.getItem("count")
   if (count) {
     localStorage.setItem("count", (parseInt(count) + 1).toString())
@@ -68,11 +68,12 @@ export function count() {
   }
 }
 
-export function getCount() {
+export function getCount(): number {
   const count = localStorage.getItem("count")
   if (count) {
-    console.log(count)
+    return parseInt(count)
   }
+  return 0
 }
 
 export function resetCount() {

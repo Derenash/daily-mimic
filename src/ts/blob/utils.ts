@@ -1,5 +1,10 @@
 import { AllClue, Blob, BlobColor, BlobType, Clue, ClueTarget, ClueTargetAll, ClueTargetRange, ClueTargetSome, ColorClue, GroupSide, SideClue, SpecificClue } from "../types";
 
+// Checks if the blob we're looking at is the target of the clue
+// Returns "true", "maybe", or "false"
+// True = Clue says it IS what it suggest
+// Maybe = Clue says it CAN BE what it suggest
+// False = Clue says nothing about it
 export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map<string, Blob>): string {
   const target = blobsMap.get(targetName);
   if (!target) return "false";
@@ -37,67 +42,4 @@ export function BlobNameIsTargeted(clue: Clue, targetName: string, blobsMap: Map
   }
 
   return "false";
-}
-
-export function blob(name: string, color: BlobColor, clue: Clue, side?: GroupSide): Blob {
-  return {
-    name: name,
-    color: color,
-    clue: clue,
-    side: side
-  };
-}
-
-export function clueSide(target: ClueTarget, side: GroupSide, blobType: BlobType): SideClue {
-  return {
-    clueType: "side",
-    side: side,
-    target: target,
-    blobType: blobType
-  };
-}
-
-export function clueColor(target: ClueTarget, color: BlobColor, blobType: BlobType): ColorClue {
-  return {
-    clueType: "color",
-    color: color,
-    target: target,
-    blobType: blobType
-  };
-}
-
-export function clueSpecific(blobName: string, blobType: BlobType): SpecificClue {
-  return {
-    clueType: "specific",
-    blobName: blobName,
-    blobType: blobType
-  };
-}
-
-export function clueAll(amount: number, blobType: BlobType): AllClue {
-  return {
-    clueType: "all",
-    amount: amount,
-    blobType: blobType
-  };
-}
-
-export function targetAll(): ClueTargetAll {
-  return {
-    type: "all"
-  };
-}
-
-export function targetSome(): ClueTargetSome {
-  return {
-    type: "some"
-  };
-}
-
-export function targetRange(minimum: number, maximum: number): ClueTargetRange {
-  return {
-    type: "range",
-    minimum: minimum,
-    maximum: maximum
-  };
 }

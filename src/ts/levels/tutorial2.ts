@@ -1,5 +1,5 @@
-import { blobColor as col, blobType as type, groupSide as side, blobColor } from "../constants/index.js";
-import { blob, clueAll, clueColor, clueSide, clueSpecific } from "../blob/utils.js";
+import { blobColor as col, blobType as type, groupSide as side } from "../constants/index.js";
+import { newBlob, clueColor, clueSide } from "../blob/index.js";
 import { Level } from "../types/blobTypes.js";
 
 
@@ -9,22 +9,22 @@ export function tutorial2(): Level {
   const maximumLiers = 1;
   const liersAmount = 1;;
 
-  const left_0 = blob("Bielzinho", col.RED,
+  const left_0 = newBlob("Bielzinho", col.RED,
     clueColor({ type: "all" }, col.BLUE, type.TRUTH),
     side.LEFT
   );
 
-  const right_0 = blob("Jaiminho", col.BLUE,
+  const right_0 = newBlob("Jaiminho", col.BLUE,
     clueSide({ type: "some" }, side.BOTTOM, type.LIE),
     side.RIGHT
   );
 
-  const bottom_0 = blob("Bob", col.RED,
+  const bottom_0 = newBlob("Bob", col.RED,
     clueColor({ type: "some" }, col.BLUE, type.LIE),
     side.BOTTOM
   );
 
-  const bottom_1 = blob("Leozin", col.BLUE,
+  const bottom_1 = newBlob("Leozin", col.BLUE,
     clueSide({ type: "some" }, side.BOTTOM, type.LIE),
     side.BOTTOM
   );

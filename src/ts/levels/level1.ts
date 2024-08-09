@@ -1,10 +1,8 @@
 import { blobColor as col, blobType as type, groupSide as side } from "../constants/index.js";
-import { blob, clueAll, clueColor, clueSide, clueSpecific } from "../blob/utils.js";
+import { clueAll, clueColor, clueSide, clueSpecific, newBlob } from "../blob/index.js";
 import { Level } from "../types/blobTypes.js";
 
-
-
-export function level_0(): Level {
+export function level1(): Level {
   const minimumLiers = 1;
   const maximumLiers = 3
   const liersAmount = 3;
@@ -14,15 +12,15 @@ export function level_0(): Level {
   // Padre: Only 1 on the right tells the truth
   // Jonas: Mario lies
 
-  const fer = blob("Fer", col.ORANGE,
+  const fer = newBlob("Fer", col.ORANGE,
     clueColor({ type: "all" }, col.ORANGE, type.TRUTH),
     side.LEFT);
 
-  const padre = blob("Padre", col.ORANGE,
-    clueSide({ type: "range", minimum: 1, maximum: 1 }, side.BOTTOM, type.LIE),
+  const padre = newBlob("Padre", col.ORANGE,
+    clueSide({ type: "range", minimum: 1, maximum: 1 }, side.RIGHT, type.LIE),
     side.LEFT);
 
-  const jonas = blob("Jonas", col.RED,
+  const jonas = newBlob("Jonas", col.RED,
     clueSpecific("Mario", type.LIE),
     side.LEFT);
 
@@ -32,15 +30,15 @@ export function level_0(): Level {
   // Mario: There are only 3 liers
   // Bidu: At least 1 red Lies
 
-  const sipher = blob("Sipher", col.RED,
+  const sipher = newBlob("Sipher", col.RED,
     clueAll(2, type.LIE),
     side.RIGHT);
 
-  const mario = blob("Mario", col.GREEN,
+  const mario = newBlob("Mario", col.GREEN,
     clueAll(3, type.LIE),
     side.RIGHT);
 
-  const bidu = blob("Bidu", col.BLUE,
+  const bidu = newBlob("Bidu", col.BLUE,
     clueColor({ type: "some" }, col.RED, type.LIE),
     side.RIGHT);
 
@@ -48,11 +46,11 @@ export function level_0(): Level {
   // Dama: All bottoms tell the truth
   // Poopy: All oranges tell the truth
 
-  const dama = blob("Dama", col.GREEN,
+  const dama = newBlob("Dama", col.GREEN,
     clueSide({ type: "all" }, side.BOTTOM, type.TRUTH),
     side.BOTTOM);
 
-  const poopy = blob("Poopy", col.ORANGE,
+  const poopy = newBlob("Poopy", col.ORANGE,
     clueColor({ type: "all" }, col.ORANGE, type.TRUTH),
     side.BOTTOM);
 

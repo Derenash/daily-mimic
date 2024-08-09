@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<!-- <html class="light-mode" lang="en"> -->
+<html class="dark-mode" lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -11,8 +12,35 @@
 </head>
 
 <body>
-  <script type="module" src="./js/main.js"></script>
+  <header>
+    <div class="header-section left">
+      <img src="assets/img/title-white-centralized.png" class="logo white-version" alt="Dark Logo">
+      <img src="assets/img/title-white-centralized.png" class="logo black-version" alt="Light Logo">
+    </div>
+    <div class="header-section center">
+      <a href="#/tutorial" class="nav-link tutorial">Tutorial</a>
+      <a href="#/easy" class="nav-link easy">Easy</a>
+      <a href="#/medium" class="nav-link medium">Medium</a>
+      <a href="#/hard" class="nav-link hard">Hard</a>
+      <a href="#/stats" class="nav-link stats">Stats</a>
+      <div class="mode-toggle center"></div>
+    </div>
+    <div class="header-section right">
+      <div class="mode-toggle right"></div>
+      <img src="assets/buttons/hamburger-icon.svg" class="hamburger-icon" id="hamburger-icon">
+    </div>
+  </header>
 
+  <main class="game-container">
+    <div class="group top"></div>
+    <div class="middle-row">
+      <div class="group left"></div>
+      <div class="group right"></div>
+    </div>
+    <div class="group bottom"></div>
+  </main>
+
+  <script type="module" src="./js/main.js"></script>
 </body>
 
 </html>

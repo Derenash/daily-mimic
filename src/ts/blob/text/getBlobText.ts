@@ -1,9 +1,7 @@
-import { Blob } from "../types";
-import { getAmountText, getBooleanText, getColorText, getIsPlural, getSidePrefix, getSideText, getVerbText } from "./utils.js";
+import { Blob } from "../../types/index.js";
+import { firstToUpper, getAmountText, getBooleanText, getColorText, getIsPlural, getSidePrefix, getSideText, getVerbText } from "./utils.js";
 
 export function getBlobText(blob: Blob): string {
-  const color = blob.color;
-  const side = blob.side;
   const booleanType = blob.clue.blobType;
   const clue = blob.clue;
   const isPlural = getIsPlural(clue);
@@ -15,7 +13,7 @@ export function getBlobText(blob: Blob): string {
     const booleanText = getBooleanText(booleanType, isPlural);
 
     const innerHtml = `
-        <line>${amountText}</line>
+        <line>${firstToUpper(amountText)}</line>
         <line>${colorText}</line>
         <line>${verbText} <${booleanType}>${booleanText}</${booleanType}>
       `
@@ -30,7 +28,7 @@ export function getBlobText(blob: Blob): string {
     const booleanText = getBooleanText(booleanType, isPlural);
 
     const innerHtml =
-      `<line>${prefix} ${sideText}</line>
+      `<line>${firstToUpper(prefix)} ${sideText}</line>
         <line>${amountText}</line>
         <line>${verbText} <${booleanType}>${booleanText}</${booleanType}>
         `
@@ -55,7 +53,7 @@ export function getBlobText(blob: Blob): string {
     const booleanText = getBooleanText(booleanType, isPlural);
 
     const innerHtml =
-      `<line>${prefix}</line>
+      `<line>${firstToUpper(prefix)}</line>
       <line>apenas</line>
       <line>${clue.amount} <${booleanType}>${booleanText}</${booleanType}></line>
       `
@@ -67,7 +65,7 @@ export function getBlobText(blob: Blob): string {
 }
 
 export function getAllPrefix(isPlural: boolean): string {
-  return isPlural ? "Existem" : "Existe";
+  return isPlural ? "existem" : "existe";
 }
 
 // ############################
