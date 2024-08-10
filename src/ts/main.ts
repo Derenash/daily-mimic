@@ -142,14 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('hashchange', handleNavigation);
 
   // Add click event listener to the random level link
-  const randomLink = document.querySelector('a[href="#/random"]');
-  if (randomLink) {
+  const randomLinks = document.querySelectorAll('a[href="#/random"]');
+  randomLinks.forEach((randomLink) =>
     randomLink.addEventListener('click', (e) => {
       e.preventDefault();
       window.location.hash = '/random';
       loadRandomLevel();
-    });
-  }
+    })
+  )
 
   // Initial navigation
   handleNavigation();
