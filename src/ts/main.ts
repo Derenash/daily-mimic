@@ -132,6 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburger.addEventListener('click', function () {
       menuItems.classList.toggle('show');
     });
+
+    menuItems.addEventListener('click', function () {
+      menuItems.classList.remove('show');
+    });
   }
 
   // Add event listener for hash changes
