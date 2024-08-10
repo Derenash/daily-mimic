@@ -7,7 +7,6 @@ import { Level } from "../types/blobTypes.js";
 export function tutorial1(): Level {
   const minimumLiers = 1;
   const maximumLiers = 1;
-  const liersAmount = 1;;
 
   const left_0 = newBlob("Bob", col.BLUE,
     clueSpecific("Leozin", type.TRUTH),
@@ -35,7 +34,6 @@ export function tutorial1(): Level {
     name: "Level 0",
     minimumLiers,
     maximumLiers,
-    liersAmount,
     blobs,
   };
 

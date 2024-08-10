@@ -601,7 +601,7 @@ Fake {
     align-items: center;
     background-color: var(--background-color);
     transition:
-      max-height 0.5s ease-out,
+      max-height 0.3s ease-out,
       opacity 0.3s ease-in,
       border 0.3s ease-out;
     max-height: 0;
@@ -623,7 +623,7 @@ Fake {
     /* Adjust this value based on your needs */
     opacity: 1;
     border-width: 1px;
-    border-top: none;
+    /* border-top: none; */
   }
 
   .hamburger-items li {
@@ -631,12 +631,15 @@ Fake {
     align-items: center;
     justify-content: center;
     width: 100%;
-    /* height: calc((var(--header-size) + var(--header-vertical-padding) * 2) * 2); */
     padding: 20px 0;
-    /* border-top: 1px solid var(--header-border-color); */
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-80px);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+
+  .hamburger-items.show li {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .hamburger-items li a {
@@ -656,36 +659,30 @@ Fake {
     padding: 0 10px;
     margin: 0;
     filter: brightness(80%);
-    transition: filter 0.3s ease;
   }
 
   .hamburger-items li a:hover {
     filter: brightness(100%);
   }
 
-  .hamburger-items.show li {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
   .hamburger-items.show li:nth-child(1) {
-    transition-delay: calc(0.1s + 0.5s);
+    transition-delay: calc(0.1s);
   }
 
   .hamburger-items.show li:nth-child(2) {
-    transition-delay: calc(0.2s + 0.5s);
+    transition-delay: calc(0.2s);
   }
 
   .hamburger-items.show li:nth-child(3) {
-    transition-delay: calc(0.3s + 0.5s);
+    transition-delay: calc(0.3s);
   }
 
   .hamburger-items.show li:nth-child(4) {
-    transition-delay: calc(0.4s + 0.5s);
+    transition-delay: calc(0.4s);
   }
 
   .hamburger-items.show li:nth-child(5) {
-    transition-delay: calc(0.5s + 0.5s);
+    transition-delay: calc(0.5s);
   }
 
   /* Add more nth-child rules if you have more items */

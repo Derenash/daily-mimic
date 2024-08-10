@@ -15,7 +15,6 @@ export interface Level {
   name: string;
   minimumLiers: number;
   maximumLiers: number;
-  liersAmount: number;
   blobs: Blob[];
 }
 
@@ -51,7 +50,7 @@ export interface SpecificClue {
 export interface AllClue {
   clueType: "all";
   amount: number;
-  blobType: BlobType;
+  blobType: "Fake";
 }
 
 

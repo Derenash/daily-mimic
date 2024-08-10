@@ -1,3 +1,4 @@
+import { blobType } from "../constants/index.js";
 import { AllClue, BlobColor, BlobType, ClueTarget, ClueTargetAll, ClueTargetRange, ClueTargetSome, ColorClue, GroupSide, SideClue, SpecificClue } from "../types";
 
 export function clueSide(target: ClueTarget, side: GroupSide, blobType: BlobType): SideClue {
@@ -26,11 +27,11 @@ export function clueSpecific(blobName: string, blobType: BlobType): SpecificClue
   };
 }
 
-export function clueAll(amount: number, blobType: BlobType): AllClue {
+export function clueAll(amount: number): AllClue {
   return {
     clueType: "all",
     amount: amount,
-    blobType: blobType
+    blobType: blobType.LIE
   };
 }
 

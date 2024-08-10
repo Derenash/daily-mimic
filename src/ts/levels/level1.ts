@@ -5,7 +5,6 @@ import { Level } from "../types/blobTypes.js";
 export function level1(): Level {
   const minimumLiers = 1;
   const maximumLiers = 3
-  const liersAmount = 3;
 
   // Left Side
   // Fer: All Oranges tell the truth
@@ -31,11 +30,11 @@ export function level1(): Level {
   // Bidu: At least 1 red Lies
 
   const sipher = newBlob("Sipher", col.RED,
-    clueAll(2, type.LIE),
+    clueAll(2),
     side.RIGHT);
 
   const mario = newBlob("Mario", col.GREEN,
-    clueAll(3, type.LIE),
+    clueAll(3),
     side.RIGHT);
 
   const bidu = newBlob("Bidu", col.BLUE,
@@ -60,7 +59,6 @@ export function level1(): Level {
     name: "Level 0",
     minimumLiers,
     maximumLiers,
-    liersAmount,
     blobs,
   };
 

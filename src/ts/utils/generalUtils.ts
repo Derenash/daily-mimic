@@ -59,23 +59,23 @@ export function log(message: string, ...optionalParams: any[]): void {
   }
 }
 
-export function addToLocalCount() {
-  const count = localStorage.getItem("count")
+export function addToLocalCount(name: string) {
+  const count = localStorage.getItem("count_" + name)
   if (count) {
-    localStorage.setItem("count", (parseInt(count) + 1).toString())
+    localStorage.setItem("count_" + name, (parseInt(count) + 1).toString())
   } else {
-    localStorage.setItem("count", "1")
+    localStorage.setItem("count_" + name, "1")
   }
 }
 
-export function getCount(): number {
-  const count = localStorage.getItem("count")
+export function getCount(name: string): number {
+  const count = localStorage.getItem("count_" + name)
   if (count) {
     return parseInt(count)
   }
   return 0
 }
 
-export function resetCount() {
-  localStorage.setItem("count", "0")
+export function resetCount(name: string) {
+  localStorage.setItem("count_" + name, "0")
 }

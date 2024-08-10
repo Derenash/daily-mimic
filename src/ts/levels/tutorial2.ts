@@ -7,7 +7,6 @@ import { Level } from "../types/blobTypes.js";
 export function tutorial2(): Level {
   const minimumLiers = 1;
   const maximumLiers = 1;
-  const liersAmount = 1;;
 
   const left_0 = newBlob("Bielzinho", col.RED,
     clueColor({ type: "all" }, col.BLUE, type.TRUTH),
@@ -36,7 +35,6 @@ export function tutorial2(): Level {
     name: "Level 0",
     minimumLiers,
     maximumLiers,
-    liersAmount,
     blobs,
   };
 

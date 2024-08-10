@@ -15,7 +15,7 @@ export function getIsPlural(clue: Clue): boolean {
   } else if (clue.clueType === "specific") {
     return false;
   } else if (clue.clueType === "all") {
-    return true;
+    return clue.amount !== 1;
   }
   return false
 }

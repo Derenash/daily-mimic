@@ -1,61 +1,119 @@
-import { level1, level2, tutorial1, tutorial2 } from './levels/index.js';
+import { levelsMap } from './levels/levelsMap.js';
 import { createCharAndChatContainer, createInitialBlobCheckStates } from './web/index.js';
 import { LevelSolver } from './solutions/findLevelSolutions.js';
 import { setupMessageHighlighting } from './utils/messageHighlighting.js';
-import { blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
+import { addToLocalCount, blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
+import { Blob, Level } from './types/blobTypes.js';
+import { generateRandomLevel } from './levels/generateLevel.js';
 
-const level = tutorial1();
-// const level = tutorial2();
-// const level = level_0();
-// const level = level_2();
-resetCount()
-localStorage.setItem("debug", "false");
-// localStorage.setItem("debug", "true");
+let currentLevel: Level | undefined;
 
-// Start the timer
-// const startTime = performance.now();
+function loadLevel(currentLevel: Level | null) {
+  if (currentLevel) {
+    // Clear existing content
+    clearContent();
 
-// Your original code
-// for (let id = 0; id < 10000; id++) {
-// levelSolver(level);
-// }
+    // Set up the new level
+    createInitialBlobCheckStates(currentLevel.blobs);
+    const blobsMap = blobMapFromList(currentLevel.blobs);
+    setupLevel(currentLevel, blobsMap);
 
-// End the timer
-// const endTime = performance.now();
+    // Solve the level (if needed)
+    const levelSolver = new LevelSolver(currentLevel);
+    const solutions = levelSolver.findSolutions();
+    const count = getCount("pathes");
+    console.log("Paths Taken: " + count);
 
-// Calculate the execution time
-// const executionTime = endTime - startTime;
+    solutions.forEach(solution => {
+      console.log(JSON.stringify([...solution.blobsClassifications]));
+      console.log(solution.currentLiarCount);
+    });
+  }
+}
+
+function clearContent() {
+  const contentAreas = ['top', 'left', 'right', 'bottom'].map(side =>
+    document.querySelector(`.group.${side}`) as HTMLElement
+  );
+  contentAreas.forEach(area => {
+    if (area) area.innerHTML = '';
+  });
+}
+
+function setupLevel(level: Level, blobsMap: Map<string, Blob>) {
+  level.blobs.forEach(blob => {
+    const target = document.querySelector(`.group.${blob.side}`) as HTMLElement;
+    if (target) {
+      const charAndChatContainer = createCharAndChatContainer(blob);
+      if (charAndChatContainer) target.appendChild(charAndChatContainer);
+    }
+  });
+  setupMessageHighlighting(blobsMap);
+}
+
+function loadRandomLevel() {
+  const possibleValues: (1 | 2 | 3)[] = [1, 2, 3];
+  const randomAmountOfBlobs = possibleValues[Math.floor(Math.random() * possibleValues.length)];
+  let randomLevel: Level;
+  let attemptsToFindALevel = 0;
+  let totalPathesTested = 0;
+
+  while (true) {
+    const level = generateRandomLevel(randomAmountOfBlobs, 3);
+    const solutions = new LevelSolver(level).findSolutions();
+    attemptsToFindALevel++;
+    totalPathesTested += getCount('pathes');
+
+    if (solutions.length === 1) {
+      randomLevel = level;
+      console.log(`Valid level found: ${attemptsToFindALevel} attempts, ${totalPathesTested} total paths tested`);
+      break;
+    } else {
+      console.log(`Attempt ${attemptsToFindALevel}: ${solutions.length} solution(s), ${getCount('pathes')} paths`);
+    }
+  }
+
+  loadLevel(randomLevel);
+  console.log(`Level loaded with ${randomAmountOfBlobs} blob(s)`);
+}
 
 
-// Log the results
-// console.log(`Execution time: ${executionTime} milliseconds`);
-// console.log(`Average time per iteration: ${executionTime / 10000} milliseconds`);
-// console.log("Solutions for the Level:" + level.name);
-// console.log(JSON.stringify([...solutions], null, 2));
-// solutions.forEach(solution => {
-//   console.log(JSON.stringify([...solution.blobs]));
-// })
 
-const levelSolver = new LevelSolver(level);
-const solutions = levelSolver.findSolutions();
-const count = getCount()
-console.log("Paths Taken: " + count);
-
-solutions.forEach(solution => {
-  console.log(JSON.stringify([...solution.blobsClassifications]));
-  console.log(solution.currentLiarCount);
-})
-
-createInitialBlobCheckStates(level.blobs);
-
-const blobsMap = blobMapFromList(level.blobs);
+function handleNavigation() {
+  const hash = window.location.hash.slice(1);  // Remove the '#' character
+  const loadNewLevel = (x: string | Level) => {
+    if (typeof (x) == "string") {
+      const level = levelsMap.get(x)
+      if (level) {
+        loadLevel(level)
+      }
+    } else {
+      loadLevel(x)
+    }
+  }
+  switch (hash) {
+    case '/tutorial':
+      loadNewLevel('tutorial1');  // or whichever tutorial level you want
+      break;
+    case '/easy':
+      loadNewLevel('level1');  // or whichever easy level you want
+      break;
+    case '/medium':
+      loadNewLevel('level2');  // or whichever medium level you want
+      break;
+    case '/hard':
+      loadNewLevel('level3');  // or whichever hard level you want
+      break;
+    case '/random':
+      loadRandomLevel();
+      break;
+    default:
+      loadNewLevel('tutorial1');  // Default to tutorial
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const modeToggles = document.querySelectorAll('.mode-toggle') as NodeListOf<HTMLElement>;
-  const topRow = document.querySelector('.group.top') as HTMLElement;
-  const leftColumn = document.querySelector('.middle-row .group.left') as HTMLElement;
-  const rightColumn = document.querySelector('.middle-row .group.right') as HTMLElement;
-  const bottomRow = document.querySelector('.group.bottom') as HTMLElement;
 
   // Function to toggle between light and dark mode
   function toggleMode() {
@@ -76,31 +134,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const blobs = level.blobs;
+  // Add event listener for hash changes
+  window.addEventListener('hashchange', handleNavigation);
 
-  blobs.forEach(blob => {
-    let target: HTMLElement | null = null;
-    switch (blob.side) {
-      case 'top':
-        target = topRow;
-        break;
-      case 'left':
-        target = leftColumn;
-        break;
-      case 'right':
-        target = rightColumn;
-        break;
-      case 'bottom':
-        target = bottomRow;
-        break;
-      default:
-        console.error('Invalid side');
-        return;
-    }
-    const charAndChatContainer = createCharAndChatContainer(blob);
-    if (charAndChatContainer) target.appendChild(charAndChatContainer);
-  });
+  // Add click event listener to the random level link
+  const randomLink = document.querySelector('a[href="#/random"]');
+  if (randomLink) {
+    randomLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.hash = '/random';
+      loadRandomLevel();
+    });
+  }
 
-  setupMessageHighlighting(blobsMap);
+  // Initial navigation
+  handleNavigation();
 });
-

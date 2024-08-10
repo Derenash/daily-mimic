@@ -1,5 +1,5 @@
 import { Blob, BlobType, Level, History } from "../types/index.js";
-import { addToLocalCount, blobMapFromList, log } from "../utils/index.js";
+import { addToLocalCount, blobMapFromList, log, resetCount } from "../utils/index.js";
 import Hypothesis from "./hypothesis.js";
 import { blobType as blobClassification } from "../constants/index.js";
 
@@ -13,6 +13,7 @@ export class LevelSolver {
   }
 
   public findSolutions(): Hypothesis[] {
+    resetCount("pathes");
     const hypothesis = new Hypothesis(this.level.minimumLiers, this.level.maximumLiers);
     const history: History = new Map();
     const nextSteps = [...this.level.blobs.map(blob => blob.name)];
@@ -32,8 +33,8 @@ export class LevelSolver {
         currentHypothesis.validateSolution();
         return [currentHypothesis];
       } catch (error: any) {
-        addToLocalCount();
-        console.log(error.message);
+        addToLocalCount("pathes");
+        log(error.message);
         return [];
       }
     }
@@ -64,8 +65,8 @@ export class LevelSolver {
       this.processBlobHypothesis(hypothesis, history, blob, testType);
       return this.exploreThe2HypothesisBranches(hypothesis, history, nextBlobs);
     } catch (error: any) {
-      addToLocalCount();
-      console.log(error.message);
+      addToLocalCount("pathes");
+      log(error.message);
       return [];
     }
   }
@@ -76,13 +77,13 @@ export class LevelSolver {
     blob: Blob,
     testType: BlobType
   ): void {
-    console.log(`Next Step!`);
+    log(`Next Step!`);
     log(`Hypothesis: \n${JSON.stringify([...hypothesis.blobsClassifications], null, 2)}`);
     log(`History: \n${JSON.stringify([...history], null, 2)}`);
     hypothesis.possibleCombinations.forEach((combination, index) => {
       log(`Combination ${index}: \n${combination.show()}`);
     })
-    console.log(`Testing: ${blob.name} being ${testType}`);
+    log(`Testing: ${blob.name} being ${testType}`);
 
     history.set(blob.name, testType);
 

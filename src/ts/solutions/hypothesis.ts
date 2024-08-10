@@ -36,7 +36,7 @@ class Hypothesis {
   }
 
   public processNewClue(clue: Clue, blobType: BlobType, levelBlobs: Blob[]): void {
-    console.log(`trying to add new clue: ${JSON.stringify(clue)}`);
+    log(`trying to add new clue: ${JSON.stringify(clue)}`);
     try {
       if (clue.clueType === "specific") {
         this.processNewBlobDefinition(clue.blobName, getRealClueType(clue.blobType, blobType));
@@ -71,7 +71,7 @@ class Hypothesis {
           }
         }
         if (blobType === blobClassification.LIE) {
-          console.log(`We're prohiting ${clue.amount} liar, adding to ${this.disallowedLiarCounts}`);
+          log(`We're prohiting ${clue.amount} liar, adding to ${this.disallowedLiarCounts}`);
           this.disallowedLiarCounts.push(clue.amount);
         }
       }
@@ -81,7 +81,7 @@ class Hypothesis {
   }
 
   public processNewBlobDefinition(blobName: string, blobType: BlobType): void {
-    console.log("trying to add " + blobName + " as " + blobType);
+    log("trying to add " + blobName + " as " + blobType);
     const existingClassification = this.blobsClassifications.get(blobName);
     try {
       if (existingClassification) {
@@ -97,7 +97,7 @@ class Hypothesis {
         //
         this.processNewBlobTypeInCombinations(blobName, blobType);
 
-        console.log(`Successfully added ${blobName} as ${blobType} to the hypothesis`);
+        log(`Successfully added ${blobName} as ${blobType} to the hypothesis`);
       }
     } catch (error: any) {
       throw new Error(`Failed to add ${blobName} as ${blobType} to the hypothesis: ${error.message}`);
@@ -115,10 +115,10 @@ class Hypothesis {
       throw new Error("Liar count out of range");
     }
 
-    console.log("Solution found!");
-    console.log(`Solution: ${JSON.stringify([...this.blobsClassifications], null, 2)}`);
-    console.log(`Hypothesis: ${JSON.stringify(this.possibleCombinations, null, 2)}`);
-    console.log(`Liar count: ${this.currentLiarCount}`);
+    log("Solution found!");
+    log(`Solution: ${JSON.stringify([...this.blobsClassifications], null, 2)}`);
+    log(`Hypothesis: ${JSON.stringify(this.possibleCombinations, null, 2)}`);
+    log(`Liar count: ${this.currentLiarCount}`);
     return;
   }
 
@@ -217,7 +217,7 @@ class Hypothesis {
   }
 
   private processNewBlobTypeInCombinations(blobName: string, blobType: BlobType): void {
-    console.log(`Checking combinations for ${blobName} as ${blobType}`);
+    log(`Checking combinations for ${blobName} as ${blobType}`);
     try {
       this.possibleCombinations.forEach((combination) => {
         const blobOccurances = combination.blobTruthFalseOccurrences.get(blobName);

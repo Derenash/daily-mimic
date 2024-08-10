@@ -5,7 +5,6 @@ import { Level } from "../types/blobTypes.js";
 export function level2(): Level {
   const minimumLiers = 1;
   const maximumLiers = 3
-  const liersAmount = 2;
 
   // Left Side
   // James: There are 2 liars on the right
@@ -31,7 +30,7 @@ export function level2(): Level {
   // Roxy: There is 1 blue Liar
 
   const sipher = newBlob("Sipher", col.GREEN,
-    clueAll(2, type.LIE),
+    clueAll(2),
     side.RIGHT);
 
   const smith = newBlob("Smith", col.BLUE,
@@ -60,7 +59,6 @@ export function level2(): Level {
     name: "Level 0",
     minimumLiers,
     maximumLiers,
-    liersAmount,
     blobs,
   };
 
