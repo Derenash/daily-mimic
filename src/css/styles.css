@@ -18,7 +18,7 @@
   --chat-container-width: calc(var(--side-group-width) - var(--side-group-gap) - var(--char-and-name-container-size))
 }
 
-:root.light-mode {
+/* :root.light-mode {
   --background-color: #C3C2B7;
   --white-logo-display: none;
   --black-logo-display: block;
@@ -28,6 +28,15 @@
 }
 
 :root.dark-mode {
+  --background-color: #413337;
+  --white-logo-display: block;
+  --black-logo-display: none;
+  --mode-reverse-color: #FFFFFF;
+  --mode-main-color: var(--background-color);
+  --header-border-color: rgba(255, 255, 255, 0.25);
+} */
+
+:root {
   --background-color: #413337;
   --white-logo-display: block;
   --black-logo-display: none;
