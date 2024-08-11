@@ -13,7 +13,7 @@ export class LevelSolver {
   }
 
   public findSolutions(): Hypothesis[] {
-    resetCount("pathes");
+    resetCount("paths");
     const hypothesis = new Hypothesis(this.level.minimumLiers, this.level.maximumLiers);
     const history: History = new Map();
     const nextSteps = [...this.level.blobs.map(blob => blob.name)];
@@ -33,7 +33,7 @@ export class LevelSolver {
         currentHypothesis.validateSolution();
         return [currentHypothesis];
       } catch (error: any) {
-        addToLocalCount("pathes");
+        addToLocalCount("paths");
         log(error.message);
         return [];
       }
@@ -65,7 +65,7 @@ export class LevelSolver {
       this.processBlobHypothesis(hypothesis, history, blob, testType);
       return this.exploreThe2HypothesisBranches(hypothesis, history, nextBlobs);
     } catch (error: any) {
-      addToLocalCount("pathes");
+      addToLocalCount("paths");
       log(error.message);
       return [];
     }

@@ -21,7 +21,7 @@ function loadLevel(currentLevel: Level | null) {
     // Solve the level (if needed)
     const levelSolver = new LevelSolver(currentLevel);
     const solutions = levelSolver.findSolutions();
-    const count = getCount("pathes");
+    const count = getCount("paths");
     console.log("Paths Taken: " + count);
 
     solutions.forEach(solution => {
@@ -51,31 +51,45 @@ function setupLevel(level: Level, blobsMap: Map<string, Blob>) {
   setupMessageHighlighting(blobsMap);
 }
 
-function loadRandomLevel() {
-  const possibleValues: (1 | 2 | 3)[] = [1, 2, 3];
-  const randomAmountOfBlobs = possibleValues[Math.floor(Math.random() * possibleValues.length)];
-  let randomLevel: Level;
-  let attemptsToFindALevel = 0;
-  let totalPathesTested = 0;
+interface LevelCriteria {
+  exactSolutions: number;
+}
 
-  while (true) {
-    const level = generateRandomLevel(randomAmountOfBlobs, 3);
-    const solutions = new LevelSolver(level).findSolutions();
-    attemptsToFindALevel++;
-    totalPathesTested += getCount('pathes');
+function loadRandomLevel(blobs: 1 | 2 | 3, maxAttempts: number = 30, criteria: LevelCriteria = { exactSolutions: 1 }) {
+  let bestLevel: Level | null = null;
+  let bestPathsTested = 0;
+  let totalAttempts = 0;
+  let totalPathsTested = 0;
 
-    if (solutions.length === 1) {
-      randomLevel = level;
-      console.log(`Valid level found: ${attemptsToFindALevel} attempts, ${totalPathesTested} total paths tested`);
-      break;
-    } else {
-      console.log(`Attempt ${attemptsToFindALevel}: ${solutions.length} solution(s), ${getCount('pathes')} paths`);
+  function runAttempts() {
+    for (let i = 0; i < maxAttempts; i++) {
+      totalAttempts++;
+      const level = generateRandomLevel(blobs, 3);
+      const solver = new LevelSolver(level);
+      const solutions = solver.findSolutions();
+      const pathsTested = getCount('paths');
+      totalPathsTested += pathsTested;
+
+      console.log(`Attempt ${totalAttempts}: ${solutions.length} solution(s), ${pathsTested} paths`);
+
+      if (solutions.length === criteria.exactSolutions && pathsTested > bestPathsTested) {
+        bestLevel = level;
+        bestPathsTested = pathsTested;
+      }
     }
   }
 
-  loadLevel(randomLevel);
-  console.log(`Level loaded with ${randomAmountOfBlobs} blob(s)`);
+  while (!bestLevel) {
+    runAttempts();
+  }
+
+  console.log(`Valid level found: ${totalAttempts} attempts, ${totalPathsTested} total paths tested`);
+  console.log(`Best level has ${bestPathsTested} paths tested`);
+  loadLevel(bestLevel);
+  console.log(`Level loaded with ${blobs} blob(s)`);
 }
+
+
 
 
 
@@ -105,7 +119,7 @@ function handleNavigation() {
       loadNewLevel('level3');  // or whichever hard level you want
       break;
     case '/random':
-      loadRandomLevel();
+      loadRandomLevel(3);
       break;
     default:
       loadNewLevel('tutorial1');  // Default to tutorial
@@ -147,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     randomLink.addEventListener('click', (e) => {
       e.preventDefault();
       window.location.hash = '/random';
-      loadRandomLevel();
+      loadRandomLevel(3);
     })
   )
 

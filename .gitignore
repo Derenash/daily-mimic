@@ -47,3 +47,6 @@ yarn.lock
 
 # Ignore coverage reports
 coverage/
+
+# ignore unused folder
+unused/
