@@ -33,7 +33,7 @@ export const blobNamesPTBR = [
   "Pompom", "Biju", "Chiquinho", "Panda", "Toto", "Tata", "Rabito",
   "Teco", "Titi", "Fofo", "Rex", "Toquinho", "Teca", "Lilo",
   "Minty", "Xereta", "Pop", "Kiko", "Mel", "Zeus", "Bento",
-  "Biruta", "Lua", "Cookie", "Luna", "Pipoca", "Zuzu", "Biscoito",
+  "Biruta", "Lua", "Biscuit", "Luna", "Pipoca", "Zuzu", "Biscoito",
   "Felix", "Bolinha", "Jujuba", "Bizu", "Bilu", "Panqueca", "Caramelo",
   "Rubi", "Cacau", "Mei", "Amora", "Bigode", "Feijao", "Preta", "Milk",
   "Guga", "Jade", "Snow", "Doce", "Lilica", "Vivi", "Magali", "Sol",
