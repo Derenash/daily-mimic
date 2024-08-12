@@ -118,7 +118,7 @@ export function generateRandomLevel(difficulty: DifficultyLevel, seed?: string):
 
   // Generate clues for each blob
   blobs.forEach(blob => {
-    blob.clue = generateRandomClue(rng, blobs, config.liarCount, [8, 4, 2, 1]);
+    blob.clue = generateRandomClue(rng, blobs, config.liarCount, [6, 4, 1, 2]);
   });
 
   return {

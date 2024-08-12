@@ -8,6 +8,7 @@ import { generateRandomLevel } from './levels/generateLevel.js';
 import Hypothesis from './solutions/hypothesis.js';
 import { difficultyConfigs, DifficultyLevel } from './types/difficulty.js';
 import { blobType } from './constants/enums.js';
+import { tutorial1 } from './levels/tutorial1.js';
 
 // Types and interfaces
 interface LevelCriteria {
@@ -137,7 +138,8 @@ function handleNavigation() {
 
   switch (path) {
     case '/tutorial':
-      loadLevelFromSeed(DifficultyLevel.Hard, "uf60uwx7pvg");
+      // loadLevelFromSeed(DifficultyLevel.Hard, "uf60uwx7pvg");
+      loadLevel(tutorial1());
       break;
     case '/easy':
       loadRandomLevel(DifficultyLevel.Easy);
