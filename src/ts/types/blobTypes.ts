@@ -16,6 +16,7 @@ export interface Level {
   minimumLiers: number;
   maximumLiers: number;
   blobs: Blob[];
+  seed?: string;
 }
 
 export interface Blob {

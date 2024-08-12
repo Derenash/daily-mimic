@@ -2,40 +2,31 @@ import { levelsMap } from './levels/levelsMap.js';
 import { createCharAndChatContainer, createInitialBlobCheckStates } from './web/index.js';
 import { LevelSolver } from './solutions/findLevelSolutions.js';
 import { setupMessageHighlighting } from './utils/messageHighlighting.js';
-import { addToLocalCount, blobMapFromList, getCount, resetCount } from './utils/generalUtils.js';
-import { Blob, Level } from './types/blobTypes.js';
+import { blobMapFromList, getCount } from './utils/generalUtils.js';
+import { Blob, BlobType, Level } from './types/blobTypes.js';
 import { generateRandomLevel } from './levels/generateLevel.js';
+import Hypothesis from './solutions/hypothesis.js';
+import { difficultyConfigs, DifficultyLevel } from './types/difficulty.js';
+import { blobType } from './constants/enums.js';
 
-let currentLevel: Level | undefined;
+// Types and interfaces
+interface LevelCriteria {
+  exactSolutions?: number;
+  liarCount?: number;
+}
 
-function loadLevel(currentLevel: Level | null) {
-  if (currentLevel) {
-    // Clear existing content
-    clearContent();
-
-    // Set up the new level
-    createInitialBlobCheckStates(currentLevel.blobs);
-    const blobsMap = blobMapFromList(currentLevel.blobs);
-    setupLevel(currentLevel, blobsMap);
-
-    // Solve the level (if needed)
-    const levelSolver = new LevelSolver(currentLevel);
-    const solutions = levelSolver.findSolutions();
-    const count = getCount("paths");
-    console.log("Paths Taken: " + count);
-
-    solutions.forEach(solution => {
-      console.log(JSON.stringify([...solution.blobsClassifications]));
-      console.log(solution.currentLiarCount);
-    });
-  }
+// Level management functions
+function loadLevel(level: Level) {
+  clearContent();
+  createInitialBlobCheckStates(level.blobs);
+  const blobsMap = blobMapFromList(level.blobs);
+  setupLevel(level, blobsMap);
+  showSolutionInConsole(level);
 }
 
 function clearContent() {
-  const contentAreas = ['top', 'left', 'right', 'bottom'].map(side =>
-    document.querySelector(`.group.${side}`) as HTMLElement
-  );
-  contentAreas.forEach(area => {
+  ['top', 'left', 'right', 'bottom'].forEach(side => {
+    const area = document.querySelector(`.group.${side}`) as HTMLElement;
     if (area) area.innerHTML = '';
   });
 }
@@ -51,120 +42,167 @@ function setupLevel(level: Level, blobsMap: Map<string, Blob>) {
   setupMessageHighlighting(blobsMap);
 }
 
-interface LevelCriteria {
-  exactSolutions: number;
+function showSolutionInConsole(level: Level) {
+  const levelSolver = new LevelSolver(level);
+  const solutions = levelSolver.findSolutions();
+
+  console.clear();
+  // Find fake blobs and truthful blobs
+  const allBlobs = new Set<string>();
+  const everFakeBlobs = new Set<string>();
+
+  solutions.forEach(solution => {
+    solution.blobsClassifications.forEach((blobClassification: BlobType, name: string) => {
+      allBlobs.add(name);
+      if (blobClassification === blobType.LIE) {
+        everFakeBlobs.add(name);
+      }
+    });
+  });
+
+  const truthfulBlobs = Array.from(allBlobs).filter(blob => !everFakeBlobs.has(blob));
+
+  // Print solutions with better formatting
+  console.log(`\n%c🧩 ${level.name} Solutions`, 'color: #4CAF50; font-weight: bold; font-size: 16px;');
+  console.log(`%cFound ${solutions.length} solution(s)`, 'color: #2196F3; font-weight: bold;');
+
+  solutions.forEach((solution, index) => {
+    const fakeBlobs = Array.from(solution.blobsClassifications.entries())
+      .filter(([_, type]) => type === blobType.LIE)
+      .map(([name, _]) => name);
+
+    console.log(`%cSolution ${index + 1}:`, 'color: #FF9800; font-weight: bold;');
+    console.log(`  %c${fakeBlobs.join(', ') || 'None'}`, 'color: #F44336; font-weight: bold;');
+  });
+
+  // Print truthful blobs
+  console.log('\n%cSafe Blobs', 'color: #4CAF50; font-weight: bold; font-size: 16px;');
+  if (truthfulBlobs.length > 0) {
+    console.log(`  %c${truthfulBlobs.join(', ')}`, 'color: #2196F3; font-weight: bold;');
+  } else {
+    console.log("%cNo blobs are always truthful across all solutions.", 'color: #F44336;');
+  }
+
+  // show level.seed 
+  console.log(`\n%cSeed: ${level.seed}`, 'color: #4CAF50; font-weight: bold; font-size: 16px;');
+
 }
 
-function loadRandomLevel(blobs: 1 | 2 | 3, maxAttempts: number = 30, criteria: LevelCriteria = { exactSolutions: 1 }) {
-  let bestLevel: Level | null = null;
-  let bestPathsTested = 0;
-  let totalAttempts = 0;
+
+
+function isLevelValid(level: Level, solutions: Hypothesis[], criteria: LevelCriteria): boolean {
+  if (criteria.exactSolutions !== undefined && solutions.length !== criteria.exactSolutions) {
+    return false;
+  }
+  if (criteria.liarCount !== undefined && solutions[0].currentLiarCount !== criteria.liarCount) {
+    return false;
+  }
+  return true;
+}
+
+function loadLevelFromSeed(difficulty: DifficultyLevel, seed: string) {
+  const level = generateRandomLevel(difficulty, seed);
+  loadLevel(level);
+}
+
+function loadRandomLevel(difficulty: DifficultyLevel, criteria: LevelCriteria = { exactSolutions: 1 }) {
+  let attempts = 0;
   let totalPathsTested = 0;
+  const { min: minLiars, max: maxLiars } = difficultyConfigs[difficulty].liarCount
+  criteria.liarCount = Math.floor(Math.random() * (maxLiars - minLiars + 1)) + minLiars;
 
-  function runAttempts() {
-    for (let i = 0; i < maxAttempts; i++) {
-      totalAttempts++;
-      const level = generateRandomLevel(blobs, 3);
-      const solver = new LevelSolver(level);
-      const solutions = solver.findSolutions();
-      const pathsTested = getCount('paths');
-      totalPathsTested += pathsTested;
+  while (true) {
+    attempts++;
+    const level = generateRandomLevel(difficulty);
+    const solver = new LevelSolver(level);
+    const solutions = solver.findSolutions();
+    const pathsTested = getCount('paths');
+    totalPathsTested += pathsTested;
 
-      console.log(`Attempt ${totalAttempts}: ${solutions.length} solution(s), ${pathsTested} paths`);
+    console.log(`Attempting to create ${difficulty} level`);
 
-      if (solutions.length === criteria.exactSolutions && pathsTested > bestPathsTested) {
-        bestLevel = level;
-        bestPathsTested = pathsTested;
-      }
+    if (isLevelValid(level, solutions, criteria)) {
+      console.log(`Valid level found: ${attempts} attempts, ${totalPathsTested} total paths tested`);
+      loadLevel(level);
+      console.log(`Level loaded with difficulty ${difficulty}`);
+      break;
     }
   }
-
-  while (!bestLevel) {
-    runAttempts();
-  }
-
-  console.log(`Valid level found: ${totalAttempts} attempts, ${totalPathsTested} total paths tested`);
-  console.log(`Best level has ${bestPathsTested} paths tested`);
-  loadLevel(bestLevel);
-  console.log(`Level loaded with ${blobs} blob(s)`);
 }
 
-
-
-
-
+// Navigation and UI functions
 function handleNavigation() {
-  const hash = window.location.hash.slice(1);  // Remove the '#' character
-  const loadNewLevel = (x: string | Level) => {
-    if (typeof (x) == "string") {
-      const level = levelsMap.get(x)
-      if (level) {
-        loadLevel(level)
-      }
-    } else {
-      loadLevel(x)
-    }
-  }
-  switch (hash) {
+  const hash = window.location.hash.slice(1);
+  const [path, difficulty, params] = hash.split('?');
+
+  switch (path) {
     case '/tutorial':
-      loadNewLevel('tutorial1');  // or whichever tutorial level you want
+      loadLevelFromSeed(DifficultyLevel.Hard, "uf60uwx7pvg");
       break;
     case '/easy':
-      loadNewLevel('level1');  // or whichever easy level you want
+      loadRandomLevel(DifficultyLevel.Easy);
       break;
     case '/medium':
-      loadNewLevel('level2');  // or whichever medium level you want
+      loadRandomLevel(DifficultyLevel.Medium);
       break;
     case '/hard':
-      loadNewLevel('level3');  // or whichever hard level you want
+      loadRandomLevel(DifficultyLevel.Hard);
       break;
-    case '/random':
-      loadRandomLevel(3);
+    case '/seed':
+      if (params && difficulty) {
+        if (difficulty.toLowerCase() === 'easy') {
+          loadLevelFromSeed(DifficultyLevel.Easy, params);
+        } else if (difficulty.toLowerCase() === 'medium') {
+          loadLevelFromSeed(DifficultyLevel.Medium, params);
+        } else if (difficulty.toLowerCase() === 'hard') {
+          loadLevelFromSeed(DifficultyLevel.Hard, params);
+        } else {
+          console.error("Invalid difficulty level");
+        }
+      } else {
+        console.error("No seed provided");
+      }
       break;
     default:
-      loadNewLevel('tutorial1');  // Default to tutorial
+      loadLevel(levelsMap.get('tutorial1')!);
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const modeToggles = document.querySelectorAll('.mode-toggle') as NodeListOf<HTMLElement>;
 
-  // Function to toggle between light and dark mode
-  function toggleMode() {
-    document.documentElement.classList.toggle('dark-mode');
-    document.documentElement.classList.toggle('light-mode');
-    modeToggles.forEach(x => x.classList.toggle('dark-mode'));
-  }
 
-  // Add click event listener to the mode toggle button
-  modeToggles.forEach(x => x.addEventListener('click', toggleMode));
+function toggleMode() {
+  document.documentElement.classList.toggle('dark-mode');
+  document.documentElement.classList.toggle('light-mode');
+  document.querySelectorAll('.mode-toggle').forEach(x => x.classList.toggle('dark-mode'));
+}
 
+function setupEventListeners() {
+  // Mode toggle
+  document.querySelectorAll('.mode-toggle').forEach(x => x.addEventListener('click', toggleMode));
+
+  // Hamburger menu
   const hamburger = document.querySelector('.hamburger-icon');
   const menuItems = document.querySelector('.hamburger-items');
-
   if (hamburger && menuItems) {
-    hamburger.addEventListener('click', function () {
-      menuItems.classList.toggle('show');
-    });
-
-    menuItems.addEventListener('click', function () {
-      menuItems.classList.remove('show');
-    });
+    hamburger.addEventListener('click', () => menuItems.classList.toggle('show'));
+    menuItems.addEventListener('click', () => menuItems.classList.remove('show'));
   }
 
-  // Add event listener for hash changes
+  // Hash change
   window.addEventListener('hashchange', handleNavigation);
 
-  // Add click event listener to the random level link
-  const randomLinks = document.querySelectorAll('a[href="#/random"]');
-  randomLinks.forEach((randomLink) =>
-    randomLink.addEventListener('click', (e) => {
+  // Random level links
+  document.querySelectorAll('a[href^="#/"]').forEach((link) =>
+    link.addEventListener('click', (e) => {
       e.preventDefault();
-      window.location.hash = '/random';
-      loadRandomLevel(3);
+      window.location.hash = (e.currentTarget as HTMLAnchorElement).getAttribute('href') || '';
+      handleNavigation();
     })
-  )
+  );
+}
 
-  // Initial navigation
+// Main initialization
+document.addEventListener('DOMContentLoaded', () => {
+  setupEventListeners();
   handleNavigation();
 });
