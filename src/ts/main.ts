@@ -108,8 +108,8 @@ function loadLevelFromSeed(difficulty: DifficultyLevel, seed: string) {
 function loadRandomLevel(difficulty: DifficultyLevel, criteria: LevelCriteria = { exactSolutions: 1 }) {
   let attempts = 0;
   let totalPathsTested = 0;
-  const { min: minLiars, max: maxLiars } = difficultyConfigs[difficulty].liarCount
-  criteria.liarCount = Math.floor(Math.random() * (maxLiars - minLiars + 1)) + minLiars;
+  // const { min: minLiars, max: maxLiars } = difficultyConfigs[difficulty].liarCount
+  // criteria.liarCount = Math.floor(Math.random() * (maxLiars - minLiars + 1)) + minLiars;
 
   while (true) {
     attempts++;
