@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && node scripts/copy-files.js"
+    "build": "tsc && node scripts/copy-files.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,5 +15,9 @@
     "glob": "^7.2.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "path": "^0.12.7"
   }
 }
