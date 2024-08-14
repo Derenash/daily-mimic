@@ -1,7 +1,7 @@
 # TODOs
 
 ## High Priority (Essential for Site Launch)
-- [ ] Migrate to farsant.es domain
+- [x] Migrate to farsant.es domain
 - [ ] Implement automatic daily puzzle generation
   - [ ] Create 90-game database (30 each: easy, medium, hard)
 - [ ] Add solution submission and validation

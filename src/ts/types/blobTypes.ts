@@ -1,15 +1,8 @@
-import { blobColor, blobType as blobClassification, groupSide, blobType } from "../constants/index.js";
-
-import { blobMapFromList, addToLocalCount, getBlobType, getRealClueType, isStatementTrue, log, moveElementToStart } from "../utils/generalUtils.js";
+import { blobColor, blobType as blobClassification, groupSide } from "../constants/index.js";
 
 export type GroupSide = typeof groupSide[keyof typeof groupSide];
 export type BlobType = typeof blobClassification[keyof typeof blobClassification];
 export type BlobColor = typeof blobColor[keyof typeof blobColor];
-
-export interface BlobTypeStyle {
-  color: string;
-  fontWeight: number;
-}
 
 export interface Level {
   name: string;

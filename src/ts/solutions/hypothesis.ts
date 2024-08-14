@@ -128,7 +128,6 @@ class Hypothesis {
 
     const totalCombinations = Math.pow(2, inputList.length);
 
-
     for (let combinationIndex = 0; combinationIndex < totalCombinations; combinationIndex++) {
 
       const currentCombination = new Map<string, BlobType>();
